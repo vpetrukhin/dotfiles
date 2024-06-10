@@ -1,0 +1,15 @@
+config/nvim/spell/*.spl
+config/nvim/spell/*.sug
+config/nvim/spell/*.add
+
+NetrwTreeListing
+.vim/
+Session.vim
+
+.DB_Store
+.DS_Store
+
+nvim/lua/vpetrukhin/local-config.lua
+
+nvim/lazy-lock.json
+nvim-minimal/lazy-lock.json
