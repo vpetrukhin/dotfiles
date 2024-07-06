@@ -6,8 +6,6 @@ return {
       require "configs.conform"
     end,
   },
-
-  -- These are some examples, uncomment them if you want to see them work!
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -15,7 +13,6 @@ return {
       require "configs.lspconfig"
     end,
   },
-
   {
     "williamboman/mason.nvim",
     opts = {
@@ -30,37 +27,29 @@ return {
       },
     },
   },
-
+  {
+    "stevearc/dressing.nvim",
+    lazy = false,
+    opts = {},
+  },
+  {
+    "christoomey/vim-tmux-navigator",
+    lazy = false,
+    cmd = {
+      "TmuxNavigateLeft",
+      "TmuxNavigateDown",
+      "TmuxNavigateUp",
+      "TmuxNavigateRight",
+      "TmuxNavigatePrevious",
+    },
+  },
   {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-      local lint = require "lint"
-
-      lint.linters_by_ft = {
-        javascript = { "eslint_d" },
-        typescript = { "eslint_d" },
-        javascriptreact = { "eslint_d" },
-        typescriptreact = { "eslint_d" },
-        svelte = { "eslint_d" },
-        python = { "pylint" },
-      }
-
-      local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
-
-      vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
-        group = lint_augroup,
-        callback = function()
-          lint.try_lint()
-        end,
-      })
-
-      vim.keymap.set("n", "<leader>l", function()
-        lint.try_lint()
-      end, { desc = "Trigger linting for current file" })
+      require "configs.lint"
     end,
   },
-
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -70,29 +59,18 @@ return {
         "vimdoc",
         "html",
         "css",
+        "typescript",
+        "javascript",
+        "json",
       },
     },
   },
-
   {
     "folke/todo-comments.nvim",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      local todo_comments = require "todo-comments"
-
-      -- set keymaps
-      local keymap = vim.keymap -- for conciseness
-
-      keymap.set("n", "]t", function()
-        todo_comments.jump_next()
-      end, { desc = "Next todo comment" })
-
-      keymap.set("n", "[t", function()
-        todo_comments.jump_prev()
-      end, { desc = "Previous todo comment" })
-
-      todo_comments.setup()
+      require "configs.todocomments"
     end,
   },
 
@@ -119,7 +97,14 @@ return {
     -- setting the keybinding for LazyGit with 'keys' is recommended in
     -- order to load the plugin when the command is run for the first time
     keys = {
-      { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
+      { "<leader>gl", "<cmd>LazyGit<cr>", desc = "LazyGit" },
     },
+  },
+  {
+    "folke/trouble.nvim",
+    lazy = false,
+    opts = {},
+    cmd = "Trouble",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
   },
 }
