@@ -4,7 +4,7 @@ local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
 
 local lspconfig = require "lspconfig"
-local servers = { "html", "cssls", "tsserver", "tailwindcss-language-server" }
+local servers = { "html", "cssls", "tsserver", "kotlin_language_server" }
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
@@ -33,5 +33,11 @@ lspconfig.tsserver.setup {
   capabilities = capabilities,
 }
 
+-- kotlin_language_server
+require("lspconfig").kotlin_language_server.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
 -- tailwindcss-language-server
-lspconfig.tailwindcss.setup {}
+-- lspconfig.tailwindcss.setup {}
