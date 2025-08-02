@@ -7,6 +7,7 @@ local options = {
     typescript = { "prettierd" },
     javascriptreact = { "prettierd" },
     typescriptreact = { "prettierd" },
+    astro = { "prettierd" },
   },
 
   format_on_save = {
