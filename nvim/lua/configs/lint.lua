@@ -6,6 +6,7 @@ lint.linters_by_ft = {
   javascriptreact = { "eslint_d" },
   typescriptreact = { "eslint_d" },
   json = { "jsonlint" },
+  scss = { "stylelint" },
 }
 
 vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
