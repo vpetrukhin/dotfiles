@@ -194,4 +194,27 @@ return {
       },
     },
   },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        stylelint_lsp = {
+          filetypes = {
+            "css",
+            "scss",
+            "sass",
+            "less",
+            "vue",
+            "svelte",
+          },
+          settings = {
+            stylelint = {
+              validateOnSave = true,
+              validateOnType = false,
+            },
+          },
+        },
+      },
+    },
+  },
 }
