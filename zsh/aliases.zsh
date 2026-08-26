@@ -6,16 +6,16 @@ alias edenv="nvim ~/.env.sh"
 
 alias reloaddot="~/dotfiles/install/bootstrap.sh"
 
-# TODO: move email to env to env
-alias copyWorkPass="keepassxc-cli clip ~/workPass.kdbx v.petrukhin@banki.ru"
+# requires WORK_EMAIL in ~/.env.sh
+alias copyWorkPass='keepassxc-cli clip ~/workPass.kdbx "$WORK_EMAIL"'
 
 # jira cli
 alias jira-my='jira issue list -a $(jira me)'
 alias jira-sprint='jira issue list --jql "project in (EXCHANGE, MG) AND assignee = currentUser() AND sprint in openSprints() AND status != Closed" --order-by priority'
 
 # orangepi
-# TODO: move username and ip to env
-alias my-orangepi="ssh -i ./orangepi 'carav@192.168.1.150'"
+# requires ORANGEPI_USER and ORANGEPI_HOST in ~/.env.sh
+alias my-orangepi='ssh -i ./orangepi "$ORANGEPI_USER@$ORANGEPI_HOST"'
 
 # utils
 function convert-to-webp() {
