@@ -20,6 +20,7 @@
 | `tmux/`        | `tmux.conf`                                      |
 | `alacritty/`   | `alacritty.toml`                                 |
 | `yazi/`        | `yazi.toml`                                      |
+| `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
 | `git/`         | глобальный `~/.gitignore`                        |
 | `install/`     | bootstrap + установка brew-пакетов               |
@@ -92,6 +93,33 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - В `herdr/config.toml` есть биндинги на плагины `herdr-file-viewer` и
   `persiyanov.reviewr`, которые сейчас не установлены (`herdr plugin list`) —
   это не опечатка, а неактивные горячие клавиши.
+
+## nvm
+
+Версионируется три файла:
+
+- `nvm/default-alias` → `~/.nvm/alias/default` — **дефолтная версия node**.
+  Сейчас там `24`: nvm резолвит это в самую свежую установленную v24.x
+  (на текущей машине — v24.18.1), патч не пинится и внешний кэш алиасов не нужен.
+  Менять можно и руками в файле, и через `nvm alias default <версия>`:
+  nvm пишет алиас через `tee`, симлинк не рвётся и правка приезжает в репозиторий.
+  Оборотная сторона — `nvm unalias default` симлинк **удалит**, тогда нужен
+  `./install/bootstrap.sh`.
+- `nvm/default-packages` → `~/.nvm/default-packages` — пакеты, которые ставятся
+  глобально при каждом `nvm install <версия>` (сейчас — LSP-серверы для nvim).
+- `nvm/init.zsh` — загрузка `nvm.sh`, completion и хук `load-nvmrc`
+  (автопереключение по `.nvmrc` при `cd`, возврат на default при выходе).
+
+`init.zsh` подключается из `rc.zsh` **после всех `export PATH=...`** — это
+принципиально. `nvm.sh` при загрузке сам активирует default и кладёт свой bin
+в начало PATH; если после этого дописать PATH руками (как было раньше),
+node из nvm перекрывается системным и `nvm current` показывает `system`.
+Не переноси `source_if_exists $DOTFILES/nvm/init.zsh` выше по файлу.
+
+`nvm.sh` ищется по списку: git-клон в `$NVM_DIR`, затем brew
+(`/opt/homebrew`, `/usr/local`) — берётся первый живой.
+
+Проверка: `zsh -i -c 'which node; nvm current; nvm version default'`.
 
 ## Herdr
 

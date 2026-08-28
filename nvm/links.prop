@@ -1,0 +1,2 @@
+$DOTFILES/nvm/default-alias=$HOME/.nvm/alias/default
+$DOTFILES/nvm/default-packages=$HOME/.nvm/default-packages

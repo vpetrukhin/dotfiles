@@ -1,0 +1,5 @@
+# пакеты, которые nvm ставит глобально при каждом `nvm install <версия>`
+# по одному имени в строке, без версий (иначе nvm ругается)
+typescript
+typescript-language-server
+vscode-langservers-extracted
