@@ -133,12 +133,32 @@ install_dotfiles () {
   done
 }
 
-create_env_file () {
-    if test -f "$HOME/.env.sh"; then
-        success "$HOME/.env.sh file already exists, skipping"
+create_env_files () {
+    mkdir -p "$HOME/.env.d"
+
+    # 00-core грузится первым, из него берётся $DOTFILES
+    if test -f "$HOME/.env.d/00-core.sh"; then
+        success "$HOME/.env.d/00-core.sh already exists, skipping"
     else
-        echo "export DOTFILES=$DOTFILES" > $HOME/.env.sh
-        success 'created ~/.env.sh'
+        echo "# core: нужно до aliases.zsh" > "$HOME/.env.d/00-core.sh"
+        echo "export DOTFILES=$DOTFILES" >> "$HOME/.env.d/00-core.sh"
+        success 'created ~/.env.d/00-core.sh'
+    fi
+
+    # заготовки под остальные слои
+    for layer in 10-work 20-personal; do
+        if test -f "$HOME/.env.d/$layer.sh"; then
+            success "$HOME/.env.d/$layer.sh already exists, skipping"
+        else
+            echo "# $layer" > "$HOME/.env.d/$layer.sh"
+            success "created ~/.env.d/$layer.sh"
+        fi
+    done
+
+    chmod 600 "$HOME"/.env.d/*.sh
+
+    if test -f "$HOME/.env.sh"; then
+        user "~/.env.sh больше не подключается — перенеси содержимое в ~/.env.d/ и удали его"
     fi
 }
 
@@ -152,7 +172,7 @@ create_nvm_derectory () {
 }
 
 install_dotfiles
-create_env_file
+create_env_files
 create_nvm_derectory
 
 echo ''

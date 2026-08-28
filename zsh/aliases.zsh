@@ -2,11 +2,11 @@
 alias tl="tmux ls"
 alias ta="tmux attach -t"
 alias eddot="nvim ~/dotfiles"
-alias edenv="nvim ~/.env.sh"
+alias edenv="nvim ~/.env.d"
 
 alias reloaddot="~/dotfiles/install/bootstrap.sh"
 
-# requires WORK_EMAIL in ~/.env.sh
+# requires WORK_EMAIL in ~/.env.d
 alias copyWorkPass='keepassxc-cli clip ~/workPass.kdbx "$WORK_EMAIL"'
 
 # jira cli
@@ -14,7 +14,7 @@ alias jira-my='jira issue list -a $(jira me)'
 alias jira-sprint='jira issue list --jql "project in (EXCHANGE, MG) AND assignee = currentUser() AND sprint in openSprints() AND status != Closed" --order-by priority'
 
 # orangepi
-# requires ORANGEPI_USER and ORANGEPI_HOST in ~/.env.sh
+# requires ORANGEPI_USER and ORANGEPI_HOST in ~/.env.d
 alias my-orangepi='ssh -i ./orangepi "$ORANGEPI_USER@$ORANGEPI_HOST"'
 
 # utils

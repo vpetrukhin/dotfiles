@@ -15,7 +15,11 @@ export EDITOR=nvim
 ZSH_THEME=frisk
 # ZSH_THEME="robbyrussell"
 
-source_if_exists $HOME/.env.sh
+# секреты и машинозависимые значения — слоями в ~/.env.d (00-core, 10-work, 20-personal)
+for env_file in $HOME/.env.d/*.sh(N); do
+    source_if_exists $env_file
+done
+unset env_file
 
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 source ~/.zprofile
