@@ -1,0 +1,21 @@
+id = "vpetrukhin.lazygit"
+name = "Lazygit"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Открыть lazygit в отдельной вкладке herdr"
+platforms = ["macos"]
+
+[[build]]
+command = ["bash", "-c", "command -v lazygit >/dev/null 2>&1 || brew install lazygit"]
+
+[[panes]]
+id = "lazygit"
+title = "lazygit"
+placement = "tab"
+command = ["bash", "-c", "exec lazygit"]
+
+[[actions]]
+id = "open-tab"
+title = "Open lazygit (new tab)"
+contexts = ["workspace"]
+command = ["bash", "-c", "DIR=\"$(bash \"$HERDR_PLUGIN_ROOT/bin/resolve-dir.sh\")\"; exec \"${HERDR_BIN_PATH:-herdr}\" plugin pane open --plugin vpetrukhin.lazygit --entrypoint lazygit --placement tab --cwd \"$DIR\" --focus"]

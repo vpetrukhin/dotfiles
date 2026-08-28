@@ -5,7 +5,7 @@
 ## Что это
 
 Личные dotfiles для рабочего macOS-сетапа. Кода нет — только конфиги
-(zsh, neovim, tmux, alacritty, yazi, git) и bash-скрипты установки.
+(zsh, neovim, tmux, alacritty, yazi, herdr, git) и bash-скрипты установки.
 Сборки, тестов и CI нет.
 
 ## Структура
@@ -20,6 +20,7 @@
 | `tmux/`        | `tmux.conf`                                      |
 | `alacritty/`   | `alacritty.toml`                                 |
 | `yazi/`        | `yazi.toml`                                      |
+| `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
 | `git/`         | глобальный `~/.gitignore`                        |
 | `install/`     | bootstrap + установка brew-пакетов               |
 
@@ -85,6 +86,47 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - `zsh/rc.zsh` дописывает строку `brew shellenv` в `~/.zprofile` при каждом
   старте шелла, поэтому файл со временем разрастается.
 - В `zsh/rc.zsh` есть абсолютные пути `/Users/vasyapetrukhin/...` (yandex-cloud, LM Studio).
+- Из `~/.config/herdr` версионируется только `config.toml` и свои плагины.
+  Остальное — рантайм-состояние самого herdr (`session.json`, `sessions/`,
+  `plugins.json` с абсолютными путями, логи, сокеты), в репозиторий не тащим.
+- В `herdr/config.toml` есть биндинги на плагины `herdr-file-viewer` и
+  `persiyanov.reviewr`, которые сейчас не установлены (`herdr plugin list`) —
+  это не опечатка, а неактивные горячие клавиши.
+
+## Herdr
+
+`herdr/config.toml` → `~/.config/herdr/config.toml`, применяется без рестарта:
+`herdr server reload-config` (проверка синтаксиса — `herdr config check`).
+
+Свои плагины лежат в `herdr/plugins/<имя>/herdr-plugin.toml` и подключаются
+локальной ссылкой прямо в репозиторий — реестр плагинов (`plugins.json`) не
+версионируется, поэтому на новой машине их надо слинковать руками:
+
+```bash
+herdr plugin link "$DOTFILES/herdr/plugins/lazygit"
+herdr plugin link "$DOTFILES/herdr/plugins/hunk"
+```
+
+После этого `plugin_root` указывает в репозиторий, и правки манифеста
+подхватываются на месте. Каждый плагин самодостаточен, поэтому
+`bin/resolve-dir.sh` (каталог активной панели из `HERDR_PLUGIN_CONTEXT_JSON`)
+лежит в обоих копией — общего `plugin_root` у них нет.
+
+Про биндинги в `[[keys.command]]`:
+
+- типы — `shell` (фоном), `pane` (временная панель), `popup` (модальный терминал),
+  `plugin_action`. Отдельного типа «открыть во вкладке» нет — вкладку даёт
+  только плагин через `placement = "tab"`, ради этого и заведены
+  `plugins/lazygit` и `plugins/hunk`.
+- дефолтные сочетания herdr занимают почти все `prefix+<буква>`
+  (`prefix+g` — goto, `prefix+shift+g` — new_worktree и т.д.). Полный список
+  закомментирован в эталонном конфиге внутри бинарника; конфликт `herdr config check`
+  **не** покажет — кастомный биндинг молча перекроет встроенный.
+- **`alt+…` не использовать**: в текущем терминале (Ghostty на macOS, без
+  `macos-option-as-alt`) option-аккорды до herdr не доходят — `prefix+alt+h`
+  не давал вообще ничего. Свободные `prefix+shift+<буква>` работают надёжно.
+- сработавшие биндинги видно в `herdr plugin log list` — если записи нет,
+  нажатие не дошло до herdr, и дело не в плагине.
 
 ## Проверка изменений
 
@@ -93,6 +135,7 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - shell: `bash -n install/bootstrap.sh`, `zsh -n zsh/rc.zsh zsh/aliases.zsh`
 - lua: `stylua --check nvim/` (если stylua установлен)
 - tmux: `tmux source-file tmux/tmux.conf`
-- симлинки: `ls -l ~/.zshrc ~/.tmux.conf ~/.config/nvim`
+- herdr: `herdr server reload-config` (подхватит `config.toml` в живом сервере)
+- симлинки: `ls -l ~/.zshrc ~/.tmux.conf ~/.config/nvim ~/.config/herdr/config.toml`
 
 Правки в `~/.zshrc` подхватываются в новом шелле или после `source ~/.zshrc`.

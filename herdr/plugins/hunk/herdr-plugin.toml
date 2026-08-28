@@ -1,0 +1,21 @@
+id = "vpetrukhin.hunk"
+name = "Hunk"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Открыть hunk diff --watch в отдельной вкладке herdr"
+platforms = ["macos"]
+
+[[build]]
+command = ["bash", "-c", "command -v hunk >/dev/null 2>&1 || brew install hunk"]
+
+[[panes]]
+id = "hunk"
+title = "hunk"
+placement = "tab"
+command = ["bash", "-c", "exec hunk diff --watch"]
+
+[[actions]]
+id = "open-tab"
+title = "Open hunk diff --watch (new tab)"
+contexts = ["workspace"]
+command = ["bash", "-c", "DIR=\"$(bash \"$HERDR_PLUGIN_ROOT/bin/resolve-dir.sh\")\"; exec \"${HERDR_BIN_PATH:-herdr}\" plugin pane open --plugin vpetrukhin.hunk --entrypoint hunk --placement tab --cwd \"$DIR\" --focus"]

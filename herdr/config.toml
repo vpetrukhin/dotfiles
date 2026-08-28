@@ -1,0 +1,47 @@
+onboarding = false
+[keys]
+prefix = "ctrl+a"
+
+[theme]
+name = "dracula"
+auto_switch = false
+
+[experimental]
+kitty_graphics = true
+
+[[keys.command]]              # open in a split pane
+key = "prefix+y"
+type = "plugin_action"
+command = "ray.file-explorer.open"
+description = "open file explorer"
+
+[[keys.command]]              # open in a new tab
+key = "prefix+Y"
+type = "plugin_action"
+command = "ray.file-explorer.open-tab"
+description = "open file explorer in a new tab"
+
+[[keys.command]]
+key = "prefix+f"
+type = "shell"
+command = "herdr plugin action invoke open-file-viewer --plugin herdr-file-viewer"
+
+[[keys.command]]              # open in a new tab; prefix+g/G заняты goto и new_worktree
+key = "prefix+shift+l"
+type = "plugin_action"
+command = "vpetrukhin.lazygit.open-tab"
+description = "open lazygit in a new tab"
+
+[[keys.command]]              # open in a new tab; alt-аккорды macOS до herdr не доходят
+key = "prefix+shift+h"
+type = "plugin_action"
+command = "vpetrukhin.hunk.open-tab"
+description = "open hunk diff --watch in a new tab"
+
+[ui]
+agent_panel_sort = "spaces"
+
+[[keys.command]]
+key = "cmd+r"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"   # <plugin_id>.<action_id> — note the id, not the name
