@@ -1,0 +1,21 @@
+id = "vpetrukhin.nvim"
+name = "Neovim"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Открыть nvim в отдельной вкладке herdr"
+platforms = ["macos"]
+
+[[build]]
+command = ["bash", "-c", "command -v nvim >/dev/null 2>&1 || brew install neovim"]
+
+[[panes]]
+id = "nvim"
+title = "nvim"
+placement = "tab"
+command = ["bash", "-c", "exec nvim"]
+
+[[actions]]
+id = "open-tab"
+title = "Open nvim (new tab)"
+contexts = ["workspace"]
+command = ["bash", "-c", "DIR=\"$(bash \"$HERDR_PLUGIN_ROOT/bin/resolve-dir.sh\")\"; exec \"${HERDR_BIN_PATH:-herdr}\" plugin pane open --plugin vpetrukhin.nvim --entrypoint nvim --placement tab --cwd \"$DIR\" --focus"]

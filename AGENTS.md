@@ -143,6 +143,7 @@ node из nvm перекрывается системным и `nvm current` п�
 ```bash
 herdr plugin link "$DOTFILES/herdr/plugins/lazygit"
 herdr plugin link "$DOTFILES/herdr/plugins/hunk"
+herdr plugin link "$DOTFILES/herdr/plugins/nvim"
 ```
 
 После этого `plugin_root` указывает в репозиторий, и правки манифеста
@@ -155,7 +156,7 @@ herdr plugin link "$DOTFILES/herdr/plugins/hunk"
 - типы — `shell` (фоном), `pane` (временная панель), `popup` (модальный терминал),
   `plugin_action`. Отдельного типа «открыть во вкладке» нет — вкладку даёт
   только плагин через `placement = "tab"`, ради этого и заведены
-  `plugins/lazygit` и `plugins/hunk`.
+  `plugins/lazygit`, `plugins/hunk` и `plugins/nvim`.
 - дефолтные сочетания herdr занимают почти все `prefix+<буква>`
   (`prefix+g` — goto, `prefix+shift+g` — new_worktree и т.д.). Полный список
   закомментирован в эталонном конфиге внутри бинарника; конфликт `herdr config check`

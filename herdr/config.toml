@@ -38,6 +38,12 @@ type = "plugin_action"
 command = "vpetrukhin.hunk.open-tab"
 description = "open hunk diff --watch in a new tab"
 
+[[keys.command]]              # open in a new tab; prefix+e занят дефолтом herdr
+key = "prefix+shift+e"
+type = "plugin_action"
+command = "vpetrukhin.nvim.open-tab"
+description = "open nvim in a new tab"
+
 [ui]
 agent_panel_sort = "spaces"
 
