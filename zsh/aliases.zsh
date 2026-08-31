@@ -9,9 +9,7 @@ alias reloaddot="~/dotfiles/install/bootstrap.sh"
 # requires WORK_EMAIL in ~/.env.d
 alias copyWorkPass='keepassxc-cli clip ~/workPass.kdbx "$WORK_EMAIL"'
 
-# jira cli
-alias jira-my='jira issue list -a $(jira me)'
-alias jira-sprint='jira issue list --jql "project in (EXCHANGE, MG) AND assignee = currentUser() AND sprint in openSprints() AND status != Closed" --order-by priority'
+# jira-cli — в zsh/jira.zsh
 
 # orangepi
 # requires ORANGEPI_USER and ORANGEPI_HOST in ~/.env.d

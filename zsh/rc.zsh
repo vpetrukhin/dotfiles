@@ -21,6 +21,7 @@ echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 source ~/.zprofile
 
 source_if_exists $DOTFILES/zsh/aliases.zsh
+source_if_exists $DOTFILES/zsh/jira.zsh
 
 source $ZSH/oh-my-zsh.sh
 
