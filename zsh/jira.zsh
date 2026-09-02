@@ -1,7 +1,8 @@
 # jira-cli: https://github.com/ankitpokhrel/jira-cli
 alias jira-view='jira issue view --comments 5'
 alias jira-my='jira issue list -a $(jira me)'
-alias jira-sprint='jira issue list --jql "project in (EXCHANGE, MG) AND assignee = currentUser() AND sprint in openSprints() AND status != Closed" --order-by priority'
+alias jira-sprint='jira issue list --jql "project in (EXCHANGE, MG) AND assignee = currentUser() AND sprint in openSprints() AND status not in (Closed, Resolved)" --order-by priority'
+alias jira-front='jira issue list --jql "project in (EXCHANGE, MG) AND labels = front AND sprint in openSprints() AND status not in (Closed, Resolved)" --order-by priority'
 
 # jira-current — задача по номеру тикета в имени текущей git-ветки (feature/EXCHANGE-123-foo)
 function jira-current() {
