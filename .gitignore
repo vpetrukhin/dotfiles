@@ -13,3 +13,6 @@ nvim/lua/vpetrukhin/local-config.lua
 
 nvim/lazy-lock.json
 nvim-minimal/lazy-lock.json
+
+# конфиги с рабочими внутренностями: bootstrap их линкует, git не видит
+private/

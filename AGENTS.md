@@ -23,6 +23,8 @@
 | `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
 | `git/`         | глобальный gitignore → `~/.config/git/ignore`    |
+| `claude/`      | `settings.json` и свои скиллы Claude Code         |
+| `private/`     | конфиги с рабочими внутренностями, **в gitignore** |
 | `install/`     | bootstrap + `Brewfile` с пакетами                |
 
 ## Механизм установки (главное, что нужно понять)
@@ -50,6 +52,23 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 2. Добавь рядом `links.prop` со строкой `src=dst` (глубина не больше 2 —
    иначе `find` его не увидит).
 3. Прогони `./install/bootstrap.sh`.
+
+### private/
+
+Репозиторий **публичный**, поэтому конфиги с рабочими внутренностями (внутренние
+хосты, ключи проектов Jira, имена рабочих репозиториев, пути к личному волту)
+лежат в `private/` — он целиком в `.gitignore`.
+
+Устроен как остальной репозиторий: `private/links.prop` (глубина 2, bootstrap
+его находит) и дальше своя структура по инструментам — `private/claude/skills/…`,
+`private/claude/agents/…`. Симлинки в `$HOME` bootstrap ставит наравне с
+публичными, разницы в работе нет.
+
+Цена — **бэкапа нет**: git этих файлов не видит. Если содержимое нужно
+сохранять, заводи под него отдельный приватный репозиторий и клонируй его
+сюда, а не полагайся на `private/`.
+
+Секреты (токены, пароли) не место и здесь — они по-прежнему только в `~/.env.d/`.
 
 ## Соглашения
 
@@ -173,6 +192,27 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
 - сработавшие биндинги видно в `herdr plugin log list` — если записи нет,
   нажатие не дошло до herdr, и дело не в плагине.
 
+## Claude Code
+
+Версионируется в `claude/`:
+
+- `claude/settings.json` → `~/.claude/settings.json` — модель, `effortLevel`,
+  тема, statusLine, включённые плагины.
+- `claude/skills/<имя>` → `~/.claude/skills/<имя>` — по симлинку на каждый скилл
+  отдельно, а не на всю директорию: рядом в `~/.claude/skills` лежат чужие
+  симлинки (`herdr`, `hunk-review` → `~/.agents/skills`, `biz-agent-kit` →
+  рабочий репозиторий), их трогать нельзя.
+
+Скиллы с рабочими внутренностями лежат в `private/claude/` (см. ниже).
+Не версионируется вообще: `settings.local.json` (он в глобальном gitignore)
+и рантайм-состояние — `history.jsonl`, `projects/`, `sessions/`, `plugins/`,
+`shell-snapshots/`, логи.
+
+Осторожно: Claude Code сам перезаписывает `settings.json` (например при смене
+темы или модели через `/config`). Если он запишет файл через «создать временный
++ переименовать», симлинк заменится обычным файлом и правки перестанут попадать
+в репозиторий. После правок через UI проверяй `ls -l ~/.claude/settings.json`.
+
 ## Проверка изменений
 
 Автотестов нет, проверяем руками:
@@ -182,5 +222,7 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
 - tmux: `tmux source-file tmux/tmux.conf`
 - herdr: `herdr server reload-config` (подхватит `config.toml` в живом сервере)
 - симлинки: `ls -l ~/.zshrc ~/.tmux.conf ~/.config/nvim ~/.config/herdr/config.toml`
+  `~/.claude/settings.json`
+- скиллы Claude Code: `jq -e . ~/.claude/settings.json` и `/doctor` в живой сессии
 
 Правки в `~/.zshrc` подхватываются в новом шелле или после `source ~/.zshrc`.
