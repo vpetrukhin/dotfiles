@@ -17,7 +17,6 @@ for env_file in $HOME/.env.d/*.sh(N); do
 done
 unset env_file
 
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 source ~/.zprofile
 
 source_if_exists $DOTFILES/zsh/aliases.zsh

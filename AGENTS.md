@@ -94,8 +94,6 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 
 - У `nvim/` **нет** `links.prop`: `~/.config/nvim` был слинкован вручную,
   bootstrap его не обслуживает.
-- `zsh/rc.zsh` дописывает строку `brew shellenv` в `~/.zprofile` при каждом
-  старте шелла, поэтому файл со временем разрастается.
 - В `zsh/rc.zsh` есть абсолютные пути `/Users/vasyapetrukhin/...` (yandex-cloud, LM Studio).
 - Из `~/.config/herdr` версионируется только `config.toml` и свои плагины.
   Остальное — рантайм-состояние самого herdr (`session.json`, `sessions/`,
