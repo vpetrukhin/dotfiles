@@ -23,6 +23,7 @@
 | `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
 | `git/`         | глобальный gitignore → `~/.config/git/ignore`    |
+| `hunk/`        | `config.toml` (терминальный просмотрщик диффов)   |
 | `claude/`      | `settings.json` и свои скиллы Claude Code         |
 | `private/`     | конфиги с рабочими внутренностями, **в gitignore** |
 | `install/`     | bootstrap + `Brewfile` с пакетами                |
@@ -122,6 +123,8 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - `alacritty` больше не установлен (перешли на `ghostty`), но конфиг
   `alacritty/` в репозитории остался.
 - В `zsh/rc.zsh` есть абсолютные пути `/Users/vasyapetrukhin/...` (yandex-cloud, LM Studio).
+- Из `~/.config/hunk` версионируется только `config.toml`. `state.json` рядом —
+  рантайм самого hunk (`lastSeenCliVersion`), в репозиторий не тащим.
 - Из `~/.config/herdr` версионируется только `config.toml` и свои плагины.
   Остальное — рантайм-состояние самого herdr (`session.json`, `sessions/`,
   `plugins.json` с абсолютными путями, логи, сокеты), в репозиторий не тащим.
