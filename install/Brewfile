@@ -1,0 +1,123 @@
+# Список пакетов рабочего сетапа. Установка: brew bundle --file=install/Brewfile
+# Обновить после установки нового пакета: brew bundle dump --force --file=install/Brewfile
+
+tap "ankitpokhrel/jira-cli"
+tap "hudochenkov/sshpass"
+tap "jesseduffield/lazygit"
+tap "mongodb/brew"
+tap "ngrok/ngrok"
+tap "oven-sh/bun"
+tap "pchuri/tap"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# Image format providing lossless and lossy compression for web images
+brew "webp"
+# GitHub command-line tool
+brew "gh"
+# Distributed revision control system
+brew "git"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Render markdown on the CLI
+brew "glow"
+# Validating, recursive, caching DNS resolver
+brew "unbound"
+# GNU Transport Layer Security (TLS) Library
+brew "gnutls"
+# GNU Privacy Guard (OpenPGP)
+brew "gnupg"
+# Open-source build automation tool based on the Groovy and Kotlin DSL
+brew "gradle"
+# Agent multiplexer that lives in your terminal
+brew "herdr"
+# User-friendly cURL replacement (command-line HTTP client)
+brew "httpie"
+# Review-first terminal diff viewer for agent-authored changesets
+brew "hunk"
+# Tools and libraries to manipulate images in select formats
+brew "imagemagick"
+# Feature-rich interactive Jira CLI
+brew "jira-cli"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Simple terminal UI for git commands
+brew "lazygit"
+# Simple tool to make locally trusted development certificates
+brew "mkcert"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# MongoDB Shell to connect, configure, query, and work with your MongoDB database
+brew "mongosh"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node@24"
+# Manage multiple Node.js versions
+brew "nvm"
+# General-purpose speech recognition model
+brew "openai-whisper"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# AI coding agent, built for the terminal
+brew "opencode"
+# Open Fortinet client for PPP+TLS VPN tunnel services
+brew "openfortivpn"
+# Cryptography and SSL/TLS Toolkit
+brew "openssl@1.1"
+# Password manager
+brew "pass"
+# General-purpose scripting language
+brew "php"
+# PDF rendering library (based on the xpdf-3.0 code base)
+brew "poppler"
+# Build tool for Scala projects
+brew "sbt"
+# 7-Zip is a file archiver with a high compression ratio
+brew "sevenzip"
+# Open source continuous file synchronization application
+brew "syncthing"
+# Terminal multiplexer
+brew "tmux"
+# Internet file retriever
+brew "wget"
+# Blazing fast terminal file manager written in Rust, based on async I/O
+brew "yazi"
+# Shell extension to navigate your filesystem faster
+brew "zoxide"
+# Additional completion definitions for zsh
+brew "zsh-completions"
+brew "hudochenkov/sshpass/sshpass", trusted: true
+# Transfer files from and to an Android smartphone
+cask "android-file-transfer"
+# Utility that prevents the system from going to sleep
+cask "caffeine"
+# Terminal-based AI coding assistant
+cask "claude-code"
+cask "font-meslo-lg-nerd-font"
+cask "font-symbols-only-nerd-font"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Speech to text application
+cask "handy"
+# Password manager app
+cask "keepassxc"
+# Web browser
+cask "librewolf"
+# Interactive tool for analyzing MongoDB data
+cask "mongodb-compass"
+cask "ngrok"
+# To-do list
+cask "todoist-app"
+# Configurator of compatible keyboards in real time
+cask "vial"
+# Unofficial app for Yandex Music
+cask "yandex-music-unofficial"
+# Multiplayer code editor
+cask "zed"
+npm "confluence-cli"

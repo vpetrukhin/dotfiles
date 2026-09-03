@@ -23,7 +23,7 @@
 | `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
 | `git/`         | глобальный gitignore → `~/.config/git/ignore`    |
-| `install/`     | bootstrap + установка brew-пакетов               |
+| `install/`     | bootstrap + `Brewfile` с пакетами                |
 
 ## Механизм установки (главное, что нужно понять)
 
@@ -97,6 +97,11 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - Глобальный gitignore линкуется в `~/.config/git/ignore`, а **не** в `~/.gitignore`:
   `core.excludesfile` нигде не задан, и git по умолчанию читает именно XDG-путь —
   симлинк на `~/.gitignore` не применялся вообще. Не «чинить» обратно.
+- В `install/Brewfile` намеренно нет секций `vscode` и `go` из `brew bundle dump`:
+  VS Code в сетапе не используется, а `go install`-пакеты требуют go-тулчейна,
+  который через brew не ставится. При новом дампе их надо вырезать снова.
+- `alacritty` больше не установлен (перешли на `ghostty`), но конфиг
+  `alacritty/` в репозитории остался.
 - В `zsh/rc.zsh` есть абсолютные пути `/Users/vasyapetrukhin/...` (yandex-cloud, LM Studio).
 - Из `~/.config/herdr` версионируется только `config.toml` и свои плагины.
   Остальное — рантайм-состояние самого herdr (`session.json`, `sessions/`,

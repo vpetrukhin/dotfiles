@@ -1,10 +1,8 @@
-brew install --cask alacritty
-brew install font-meslo-lg-nerd-font
-brew install jesseduffield/lazygit/lazygit
-brew install tmux
-brew install herdr
-brew install yazi ffmpeg sevenzip jq poppler fd fzf zoxide imagemagick font-symbols-only-nerd-font
-brew install ripgrep
-brew install neovim
-brew install nvm 
-brew install node
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")"
+
+# всё состояние — в Brewfile, список формул и касок правится там
+brew bundle --file=Brewfile
