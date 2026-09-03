@@ -22,7 +22,7 @@
 | `yazi/`        | `yazi.toml`                                      |
 | `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
-| `git/`         | глобальный `~/.gitignore`                        |
+| `git/`         | глобальный gitignore → `~/.config/git/ignore`    |
 | `install/`     | bootstrap + установка brew-пакетов               |
 
 ## Механизм установки (главное, что нужно понять)
@@ -94,6 +94,9 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 
 - У `nvim/` **нет** `links.prop`: `~/.config/nvim` был слинкован вручную,
   bootstrap его не обслуживает.
+- Глобальный gitignore линкуется в `~/.config/git/ignore`, а **не** в `~/.gitignore`:
+  `core.excludesfile` нигде не задан, и git по умолчанию читает именно XDG-путь —
+  симлинк на `~/.gitignore` не применялся вообще. Не «чинить» обратно.
 - В `zsh/rc.zsh` есть абсолютные пути `/Users/vasyapetrukhin/...` (yandex-cloud, LM Studio).
 - Из `~/.config/herdr` версионируется только `config.toml` и свои плагины.
   Остальное — рантайм-состояние самого herdr (`session.json`, `sessions/`,
