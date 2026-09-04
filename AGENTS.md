@@ -200,7 +200,13 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
 Версионируется в `claude/`:
 
 - `claude/settings.json` → `~/.claude/settings.json` — модель, `effortLevel`,
-  тема, statusLine, включённые плагины.
+  тема, statusLine, `outputStyle`, включённые плагины.
+- `claude/output-styles/<имя>.md` → `~/.claude/output-styles/<имя>.md` — свои
+  output styles. Сейчас один — `caveman` (сжатые ответы), он же прописан в
+  `outputStyle` в `settings.json`, то есть включён по умолчанию во всех сессиях.
+  Переключение на ходу — `/output-style`, текущий виден в statusLine (`Style:`).
+  Правила стиля скопированы из скилла `caveman` (`.agents/skills/caveman`) —
+  апдейты скилла в стиль сами не приезжают, синхронизировать руками.
 - `claude/skills/<имя>` → `~/.claude/skills/<имя>` — по симлинку на каждый скилл
   отдельно, а не на всю директорию: рядом в `~/.claude/skills` лежат чужие
   симлинки (`herdr`, `hunk-review` → `~/.agents/skills`, `biz-agent-kit` →

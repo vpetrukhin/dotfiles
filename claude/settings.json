@@ -15,6 +15,7 @@
     "biz-agent-kit@biz-agent-kit": true
   },
   "effortLevel": "high",
+  "outputStyle": "caveman",
   "theme": "dark",
   "mcpServers": {
     "figma-remote-mcp": {
