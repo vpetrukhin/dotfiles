@@ -15,6 +15,9 @@ alias copyWorkPass='keepassxc-cli clip ~/workPass.kdbx "$WORK_EMAIL"'
 # requires ORANGEPI_USER and ORANGEPI_HOST in ~/.env.d
 alias my-orangepi='ssh -i ./orangepi "$ORANGEPI_USER@$ORANGEPI_HOST"'
 
+# ssh hosts из ~/.ssh/config
+alias 3xui-server='ssh firstbyte-finland-server'
+
 # utils
 function convert-to-webp() {
   for file in ./convert/*.png; do
