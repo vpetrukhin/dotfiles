@@ -17,6 +17,8 @@ alias my-orangepi='ssh -i ./orangepi "$ORANGEPI_USER@$ORANGEPI_HOST"'
 
 # ssh hosts из ~/.ssh/config
 alias 3xui-server='ssh firstbyte-finland-server'
+# requires XUI_SSH_PORT, XUI_SSH_USER, XUI_SSH_HOST and XUI_SSH_KEY in ~/.env.d
+alias 3xui-tunnel='ssh -i "$XUI_SSH_KEY" -p "$XUI_SSH_PORT" -N -L 2053:127.0.0.1:51413 "$XUI_SSH_USER@$XUI_SSH_HOST"'
 
 # utils
 function convert-to-webp() {
