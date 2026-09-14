@@ -46,6 +46,9 @@ description = "open nvim in a new tab"
 
 [ui]
 agent_panel_sort = "spaces"
+# herdr-automatic-rename: промпт имени новой вкладки считается ручным переименованием
+# и отключает автонейминг для этой вкладки
+prompt_new_tab_name = false
 
 [[keys.command]]
 key = "cmd+r"

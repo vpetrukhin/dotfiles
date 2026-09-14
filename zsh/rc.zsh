@@ -39,6 +39,13 @@ function y() {
 	rm -f -- "$tmp"
 }
 
+# herdr-automatic-rename: live tab naming hook
+# (N) — nullglob: без установленного плагина glob схлопывается в пустоту, а не ругается
+for _f in $HOME/.config/herdr/plugins/github/herdr-automatic-rename-*/shell/hook.zsh(N); do
+    source $_f; break
+done
+unset _f
+
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/vasyapetrukhin/.lmstudio/bin"
 
