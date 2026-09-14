@@ -1,0 +1,2 @@
+$DOTFILES/agents/skills/keepassxc-cli=$HOME/.claude/skills/keepassxc-cli
+$DOTFILES/agents/skills/keepassxc-cli=$HOME/.agents/skills/keepassxc-cli

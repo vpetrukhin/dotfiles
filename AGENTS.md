@@ -24,7 +24,8 @@
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
 | `git/`         | глобальный gitignore → `~/.config/git/ignore`    |
 | `hunk/`        | `config.toml` (терминальный просмотрщик диффов)   |
-| `claude/`      | `settings.json` и свои скиллы Claude Code         |
+| `claude/`      | `settings.json` и скиллы только для Claude Code    |
+| `agents/`      | скиллы, общие для всех агентов (Claude Code, pi)  |
 | `private/`     | конфиги с рабочими внутренностями, **в gitignore** |
 | `install/`     | bootstrap + `Brewfile` с пакетами                |
 
@@ -117,6 +118,11 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - Глобальный gitignore линкуется в `~/.config/git/ignore`, а **не** в `~/.gitignore`:
   `core.excludesfile` нигде не задан, и git по умолчанию читает именно XDG-путь —
   симлинк на `~/.gitignore` не применялся вообще. Не «чинить» обратно.
+- `keepassxc-cli` отдельной формулы в Homebrew не имеет и в `Brewfile` отдельной
+  строкой не появится: его ставит каска `keepassxc` как Binary-артефакт —
+  `/opt/homebrew/bin/keepassxc-cli` это симлинк внутрь `KeePassXC.app`. Не добавлять
+  `brew "keepassxc-cli"` и не «чинить» симлинк. Комментарии в `Brewfile` тоже
+  бессмысленны — `brew bundle dump --force` перезаписывает их своими.
 - В `install/Brewfile` намеренно нет секций `vscode` и `go` из `brew bundle dump`:
   VS Code в сетапе не используется, а `go install`-пакеты требуют go-тулчейна,
   который через brew не ставится. При новом дампе их надо вырезать снова.
@@ -221,6 +227,36 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
 темы или модели через `/config`). Если он запишет файл через «создать временный
 + переименовать», симлинк заменится обычным файлом и правки перестанут попадать
 в репозиторий. После правок через UI проверяй `ls -l ~/.claude/settings.json`.
+
+## Общие скиллы агентов (`agents/`)
+
+Скиллы, не завязанные на конкретный harness, лежат в `agents/skills/<имя>/SKILL.md`
+(формат [Agent Skills](https://agentskills.io/specification): frontmatter `name` +
+`description`, рядом `scripts/`, `references/`). Сейчас там `keepassxc-cli`.
+
+`agents/links.prop` линкует каждый такой скилл **в две точки сразу**:
+
+```
+$DOTFILES/agents/skills/<имя>=$HOME/.claude/skills/<имя>
+$DOTFILES/agents/skills/<имя>=$HOME/.agents/skills/<имя>
+```
+
+- `~/.claude/skills/` — откуда читает Claude Code.
+- `~/.agents/skills/` — общий каталог стандарта; оттуда читает `pi`
+  (`@earendil-works/pi-coding-agent`, ставится через `nvm/default-packages`), а также
+  туда кладут свои скиллы herdr и hunk. Настройки pi для этого править не надо —
+  каталог в списке источников по умолчанию (`pi` → `docs/skills.md`, раздел Locations).
+
+Две строки с одним источником bootstrap обрабатывает независимо, это не опечатка.
+
+Скилл, полезный только в Claude Code (завязан на его тулы, сабагентов, `/`-команды),
+оставляй в `claude/skills/` — дублировать его в `~/.agents/skills` смысла нет.
+
+В `agents/` не должно быть внутренних хостов, ключей проектов и путей к личному волту:
+каталог версионируется, репозиторий публичный. Рабочее — в `private/claude/skills/`.
+
+Проверка, что pi видит скилл: `pi -p '/skill:keepassxc-cli'` или `pi` → `/skill:` и
+поиск по списку. Имя скилла у pi матчить имя директории не обязано, но у нас совпадает.
 
 ## Проверка изменений
 
