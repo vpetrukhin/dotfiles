@@ -10,6 +10,8 @@ tap "oven-sh/bun"
 tap "pchuri/tap"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Modern, maintained replacement for ls
+brew "eza"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Play, record, convert, and stream select audio and video codecs
@@ -36,6 +38,8 @@ brew "gnupg"
 brew "gradle"
 # Agent multiplexer that lives in your terminal
 brew "herdr"
+# <hr />, for your terminal window
+brew "hr"
 # User-friendly cURL replacement (command-line HTTP client)
 brew "httpie"
 # Review-first terminal diff viewer for agent-authored changesets

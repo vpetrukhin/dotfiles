@@ -19,10 +19,11 @@ unset env_file
 
 source ~/.zprofile
 
+source $ZSH/oh-my-zsh.sh
+
+# строго после oh-my-zsh: он определяет свои ls/ll/la и затирает наши
 source_if_exists $DOTFILES/zsh/aliases.zsh
 source_if_exists $DOTFILES/zsh/jira.zsh
-
-source $ZSH/oh-my-zsh.sh
 
 export PATH=/opt/homebrew/bin:$PATH
 export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:${PATH}

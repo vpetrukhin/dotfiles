@@ -6,6 +6,12 @@ alias edenv="nvim ~/.env.d"
 
 alias reloaddot="~/dotfiles/install/bootstrap.sh"
 
+# eza — замена ls
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -l --icons --git --group-directories-first'
+alias la='eza -la --icons --git --group-directories-first'
+alias lt='eza --tree --level=2 --icons'
+
 # requires WORK_EMAIL in ~/.env.d
 alias copyWorkPass='keepassxc-cli clip ~/workPass.kdbx "$WORK_EMAIL"'
 
