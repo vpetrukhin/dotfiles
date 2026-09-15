@@ -5,7 +5,7 @@
 ## Что это
 
 Личные dotfiles для рабочего macOS-сетапа. Кода нет — только конфиги
-(zsh, neovim, tmux, alacritty, yazi, herdr, git) и bash-скрипты установки.
+(zsh, neovim, tmux, ghostty, yazi, herdr, git) и bash-скрипты установки.
 Сборки, тестов и CI нет.
 
 ## Структура
@@ -18,7 +18,7 @@
 | `nvim/`        | конфиг на базе LazyVim-starter (Lua)             |
 | `nvim_minimal/`| минимальный отдельный конфиг для быстрых правок  |
 | `tmux/`        | `tmux.conf`                                      |
-| `alacritty/`   | `alacritty.toml`                                 |
+| `ghostty/`     | `config` (эмулятор терминала)                    |
 | `yazi/`        | `yazi.toml`                                      |
 | `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
@@ -126,8 +126,14 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - В `install/Brewfile` намеренно нет секций `vscode` и `go` из `brew bundle dump`:
   VS Code в сетапе не используется, а `go install`-пакеты требуют go-тулчейна,
   который через brew не ставится. При новом дампе их надо вырезать снова.
-- `alacritty` больше не установлен (перешли на `ghostty`), но конфиг
-  `alacritty/` в репозитории остался.
+- Ghostty на macOS читает и `~/.config/ghostty/config` (сюда bootstrap ставит
+  симлинк из репозитория), и `~/Library/Application Support/com.mitchellh.ghostty/config`
+  — второй грузится позже и переопределяет первый. Старый локальный конфиг
+  (`config.ghostty`) удалён, его настройки перенесены в репозиторий. Не заводить
+  его заново: он молча перебьёт то, что ставит bootstrap.
+- В конфиге ghostty намеренно не задан `term`: у ghostty свой terminfo
+  `xterm-ghostty`. Если на удалённом хосте его нет, ставить его надо там
+  (`infocmp -x | ssh host -- tic -x -`), а не откатывать `term` локально.
 - В `zsh/rc.zsh` есть абсолютные пути `/Users/vasyapetrukhin/...` (yandex-cloud, LM Studio).
 - Из `~/.config/hunk` версионируется только `config.toml`. `state.json` рядом —
   рантайм самого hunk (`lastSeenCliVersion`), в репозиторий не тащим.

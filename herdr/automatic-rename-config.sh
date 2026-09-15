@@ -18,7 +18,7 @@ AUTO_INDEX_AGENTS=0
 
 # ---- иконки ----
 
-# В alacritty стоит MesloLGS Nerd Font Mono, глифы рисуются корректно.
+# В ghostty стоит MesloLGS Nerd Font Mono, глифы рисуются корректно.
 ICONS_ENABLED=1
 ICON_STYLE=name_and_icon
 
