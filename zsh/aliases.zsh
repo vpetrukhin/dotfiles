@@ -38,3 +38,7 @@ alias ds-ls='node ~/.claude/skills/dev-stand/scripts/dev-stand.js ls'
 alias ds-who='node ~/.claude/skills/dev-stand/scripts/dev-stand.js who'
 alias ds-up='node ~/.claude/skills/dev-stand/scripts/dev-stand.js up'
 
+# приватные алиасы (не в репозитории) — строго последними, чтобы они могли
+# переопределять всё, что объявлено выше
+source_if_exists $DOTFILES/private/zsh/aliases.zsh
+
