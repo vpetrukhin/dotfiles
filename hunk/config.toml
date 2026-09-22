@@ -1,7 +1,7 @@
 theme = "github-dark-default"
 mode = "split"
 line_numbers = false
-wrap_lines = true
+wrap_lines = false
 hunk_headers = true
 menu_bar = true
 agent_notes = true
