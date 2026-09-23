@@ -104,7 +104,7 @@ cask "android-file-transfer"
 # Utility that prevents the system from going to sleep
 cask "caffeine"
 # Terminal-based AI coding assistant
-cask "claude-code"
+cask "claude-code@latest"
 cask "font-meslo-lg-nerd-font"
 cask "font-symbols-only-nerd-font"
 # Terminal emulator that uses platform-native UI and GPU acceleration
