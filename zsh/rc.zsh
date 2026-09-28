@@ -19,6 +19,8 @@ unset env_file
 
 source ~/.zprofile
 
+# Дополнительные автодополнения Homebrew должны попасть в fpath до compinit из oh-my-zsh.
+fpath=(/opt/homebrew/share/zsh-completions $fpath)
 source $ZSH/oh-my-zsh.sh
 
 # строго после oh-my-zsh: он определяет свои ls/ll/la и затирает наши
