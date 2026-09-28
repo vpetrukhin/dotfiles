@@ -1,2 +1,6 @@
 $DOTFILES/agents/skills/keepassxc-cli=$HOME/.claude/skills/keepassxc-cli
 $DOTFILES/agents/skills/keepassxc-cli=$HOME/.agents/skills/keepassxc-cli
+$DOTFILES/agents/skills/daily=$HOME/.claude/skills/daily
+$DOTFILES/agents/skills/daily=$HOME/.agents/skills/daily
+$DOTFILES/agents/skills/task=$HOME/.claude/skills/task
+$DOTFILES/agents/skills/task=$HOME/.agents/skills/task
