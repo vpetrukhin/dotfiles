@@ -5,6 +5,8 @@ alias eddot="nvim ~/dotfiles"
 alias edenv="nvim ~/.env.d"
 
 alias reloaddot="~/dotfiles/install/bootstrap.sh"
+alias daily-create='$DOTFILES/zsh/daily-create.sh'
+alias daily-tomorrow='daily-create "$(date -v+1d +%Y-%m-%d)"'
 
 # eza — замена ls
 alias ls='eza --icons --group-directories-first'
