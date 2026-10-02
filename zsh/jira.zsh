@@ -1,5 +1,9 @@
 # jira-cli: https://github.com/ankitpokhrel/jira-cli
 alias jira-view='jira issue view --comments 5'
+alias jv='jira-view'
+# jira-open — открыть задачу в браузере
+alias jira-open='jira open'
+alias jo='jira-open'
 alias jira-my='jira issue list -a $(jira me)'
 alias jira-sprint='jira issue list --jql "project in (EXCHANGE, MG) AND assignee = currentUser() AND sprint in openSprints() AND status not in (Closed, Resolved)" --order-by priority'
 alias jira-front='jira issue list --jql "project in (EXCHANGE, MG) AND labels = front AND sprint in openSprints() AND status not in (Closed, Resolved)" --order-by priority'
