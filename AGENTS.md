@@ -207,6 +207,12 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
 - сработавшие биндинги видно в `herdr plugin log list` — если записи нет,
   нажатие не дошло до herdr, и дело не в плагине.
 
+Ссылки в панелях (и обычные URL, и OSC 8, как в `jira-table` из `zsh/jira.zsh`)
+открываются по **ctrl+клику**, а не по cmd+клику: herdr захватывает мышь
+(`mouse_capture = true` по умолчанию), и в захваченных событиях cmd от обычного
+клика не отличается. Это не поломка — выключать `mouse_capture` ради cmd+клика
+не надо, пропадёт мышиный UI herdr.
+
 ## Claude Code
 
 Версионируется в `claude/`:
