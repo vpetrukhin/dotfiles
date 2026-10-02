@@ -3,7 +3,7 @@ onboarding = false
 prefix = "ctrl+a"
 
 [theme]
-name = "dracula"
+name = "catppuccin"
 auto_switch = false
 
 [experimental]
@@ -46,11 +46,20 @@ description = "open nvim in a new tab"
 
 [ui]
 agent_panel_sort = "spaces"
+
 # herdr-automatic-rename: промпт имени новой вкладки считается ручным переименованием
 # и отключает автонейминг для этой вкладки
 prompt_new_tab_name = false
+
+[ui.sidebar.agents]
+rows = [["state_icon", "workspace", "tab", "pane", "agent"]]
 
 [[keys.command]]
 key = "cmd+r"
 type = "plugin_action"
 command = "persiyanov.reviewr.toggle"   # <plugin_id>.<action_id> — note the id, not the name
+
+# >>> herdr-radar theme block
+[theme.custom]
+active_row_bg = "#414868"
+# <<< herdr-radar theme block
