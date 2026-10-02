@@ -12,10 +12,19 @@
   },
   "enabledPlugins": {
     "typescript-lsp@claude-plugins-official": true,
-    "biz-agent-kit@biz-agent-kit": true
+    "biz-agent-kit@biz-agent-kit": true,
+    "figma@claude-plugins-official": true
   },
-  "effortLevel": "high",
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
+  },
   "outputStyle": "caveman",
+  "effortLevel": "high",
   "theme": "dark",
   "mcpServers": {
     "figma-remote-mcp": {
