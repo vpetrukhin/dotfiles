@@ -8,6 +8,11 @@ alias reloaddot="~/dotfiles/install/bootstrap.sh"
 alias daily-create='$DOTFILES/zsh/daily-create.sh'
 alias daily-tomorrow='daily-create "$(date -v+1d +%Y-%m-%d)"'
 
+# обновить текущую ветку из upstream без merge-коммита
+alias gup='git pull --rebase'
+# получить изменения с remote и обновить текущую ветку
+alias gfp='git fetch && git pull'
+
 # eza — замена ls
 alias ls='eza --icons --group-directories-first'
 alias ll='eza -l --icons --git --group-directories-first'
