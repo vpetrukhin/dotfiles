@@ -4,26 +4,79 @@ alias jv='jira-view'
 # jira-open — открыть задачу в браузере
 alias jira-open='jira open'
 alias jo='jira-open'
+# jira-move — перевести задачу в статус: jira-move EXCHANGE-123 "In Progress"; без статуса — интерактивный выбор
+alias jira-move='jira issue move'
+alias jm='jira-move'
+
+# _jira_clip_key — номер задачи из буфера обмена.
+# В буфере может быть ключ или ссылка на задачу (…/browse/EXCHANGE-123)
+function _jira_clip_key() {
+  local clip
+  clip=$(pbpaste)
+  if [[ ${clip:u} =~ '(^|[^A-Z0-9])([A-Z]+-[0-9]+)([^A-Z0-9]|$)' ]]; then
+    print -r -- $match[2]
+  else
+    print -u2 "$1: в буфере нет номера задачи"
+    return 1
+  fi
+}
+
+# jira-move-clip — перевести в статус задачу из буфера: jira-move-clip "In Progress"
+function jira-move-clip() {
+  local key
+  key=$(_jira_clip_key jira-move-clip) || return 1
+  jira issue move "$key" "$@"
+}
+alias jmc='jira-move-clip'
+
+# jira-open-clip — открыть в браузере задачу из буфера
+function jira-open-clip() {
+  local key
+  key=$(_jira_clip_key jira-open-clip) || return 1
+  jira open "$key" "$@"
+}
+alias joc='jira-open-clip'
 alias jira-my='jira issue list -a $(jira me)'
 alias jira-sprint='jira issue list --jql "project in (EXCHANGE, MG) AND assignee = currentUser() AND sprint in openSprints() AND status not in (Closed, Resolved)" --order-by priority'
 alias jira-front='jira issue list --jql "project in (EXCHANGE, MG) AND labels = front AND sprint in openSprints() AND status not in (Closed, Resolved)" --order-by priority'
 
-# jira-current — задача по номеру тикета в имени текущей git-ветки (feature/EXCHANGE-123-foo)
-function jira-current() {
-  local branch key
+# _jira_branch_key — номер задачи из имени текущей git-ветки (feature/EXCHANGE-123-foo)
+function _jira_branch_key() {
+  local branch
   branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null) || {
-    print -u2 "jira-current: не git-репозиторий"
+    print -u2 "$1: не git-репозиторий"
     return 1
   }
   if [[ ${branch:u} =~ '(^|[^A-Z0-9])([A-Z]+-[0-9]+)([^A-Z0-9]|$)' ]]; then
-    key=$match[2]
-  fi
-  if [[ -z $key ]]; then
-    print -u2 "jira-current: в имени ветки '$branch' нет номера задачи"
+    print -r -- $match[2]
+  else
+    print -u2 "$1: в имени ветки '$branch' нет номера задачи"
     return 1
   fi
+}
+
+# jira-current — задача по текущей ветке
+function jira-current() {
+  local key
+  key=$(_jira_branch_key jira-current) || return 1
   jira issue view --comments 5 "$key" "$@"
 }
+
+# jira-move-branch — перевести в статус задачу по текущей ветке: jira-move-branch "In Progress"
+function jira-move-branch() {
+  local key
+  key=$(_jira_branch_key jira-move-branch) || return 1
+  jira issue move "$key" "$@"
+}
+alias jmb='jira-move-branch'
+
+# jira-open-branch — открыть в браузере задачу по текущей ветке
+function jira-open-branch() {
+  local key
+  key=$(_jira_branch_key jira-open-branch) || return 1
+  jira open "$key" "$@"
+}
+alias job='jira-open-branch'
 
 # jira-table — таблица KEY / SPRINT / STATUS / SUMMARY по JQL.
 # jira-cli колонку спринта не умеет, поэтому напрямую через REST API.
