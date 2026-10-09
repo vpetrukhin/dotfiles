@@ -63,7 +63,8 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 
 Устроен как остальной репозиторий: `private/links.prop` (глубина 2, bootstrap
 его находит) и дальше своя структура по инструментам — `private/claude/skills/…`,
-`private/claude/agents/…`. Симлинки в `$HOME` bootstrap ставит наравне с
+`private/claude/agents/…`, `private/ssh/config` → `~/.ssh/config` (только
+конфиг, ключи — в KeePassXC). Симлинки в `$HOME` bootstrap ставит наравне с
 публичными, разницы в работе нет.
 
 Цена — **бэкапа нет**: git этих файлов не видит. Если содержимое нужно
