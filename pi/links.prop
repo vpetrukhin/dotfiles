@@ -1,0 +1,2 @@
+$DOTFILES/pi/settings.json=$HOME/.pi/agent/settings.json
+$DOTFILES/pi/keybindings.json=$HOME/.pi/agent/keybindings.json

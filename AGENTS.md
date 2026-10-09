@@ -22,6 +22,7 @@
 | `yazi/`        | `yazi.toml`                                      |
 | `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
+| `pi/`          | `settings.json`, `keybindings.json` → `~/.pi/agent/` (coding-агент pi) |
 | `git/`         | `config` и глобальный gitignore → `~/.config/git/` |
 | `hunk/`        | `config.toml` (терминальный просмотрщик диффов)   |
 | `claude/`      | `settings.json` и скиллы только для Claude Code    |
@@ -259,6 +260,18 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
 темы или модели через `/config`). Если он запишет файл через «создать временный
 + переименовать», симлинк заменится обычным файлом и правки перестанут попадать
 в репозиторий. После правок через UI проверяй `ls -l ~/.claude/settings.json`.
+
+## pi
+
+Из `~/.pi/agent/` версионируются только `settings.json` (провайдер, модель,
+список `packages`) и `keybindings.json`. Остальное — рантайм и секреты
+(`auth.json`, `models-store.json`, `sessions/`, `mcp-*.json`), в репозиторий
+не тащим.
+
+pi сам пишет в `settings.json` (например `lastChangelogVersion` после обновления),
+но через `writeFileSync` по тому же пути, а не через переименование —
+симлинк не рвётся, а правка просто приезжает в репозиторий диффом.
+Блокировку `proper-lockfile` ставит рядом с симлинком, это не мусор.
 
 ## Общие скиллы агентов (`agents/`)
 
