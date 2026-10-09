@@ -8,6 +8,8 @@ tap "mongodb/brew"
 tap "ngrok/ngrok"
 tap "oven-sh/bun"
 tap "pchuri/tap"
+# Automatically restart SSH sessions and tunnels
+brew "autossh"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Modern, maintained replacement for ls
