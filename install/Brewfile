@@ -88,8 +88,6 @@ brew "sbt"
 brew "sevenzip"
 # Open source continuous file synchronization application
 brew "syncthing"
-# Terminal multiplexer
-brew "tmux"
 # Internet file retriever
 brew "wget"
 # Friendly and fast tool for sending HTTP requests

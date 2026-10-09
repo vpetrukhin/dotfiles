@@ -1,6 +1,4 @@
 # aliases
-alias tl="tmux ls"
-alias ta="tmux attach -t"
 alias eddot="nvim ~/dotfiles"
 alias edenv="nvim ~/.env.d"
 

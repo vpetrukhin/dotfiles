@@ -5,7 +5,7 @@
 ## Что это
 
 Личные dotfiles для рабочего macOS-сетапа. Кода нет — только конфиги
-(zsh, neovim, tmux, ghostty, yazi, herdr, git) и bash-скрипты установки.
+(zsh, neovim, ghostty, yazi, herdr, git) и bash-скрипты установки.
 Сборки, тестов и CI нет.
 
 ## Структура
@@ -17,7 +17,6 @@
 | `zsh/`         | `rc.zsh` → `~/.zshrc`, `zprofile` → `~/.zprofile`, `aliases.zsh` (алиасы и функции) |
 | `nvim/`        | конфиг на базе LazyVim-starter (Lua)             |
 | `nvim_minimal/`| минимальный отдельный конфиг для быстрых правок  |
-| `tmux/`        | `tmux.conf`                                      |
 | `ghostty/`     | `config` (эмулятор терминала)                    |
 | `yazi/`        | `yazi.toml`                                      |
 | `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
@@ -92,7 +91,7 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - **Коммиты** — по Conventional Commits, оформляем через локальный скилл `git-commit`:
   `<type>(<scope>): <описание>`. Заголовок английский, в императиве, строчными,
   до 72 символов; тело — по-русски и только когда есть что объяснить.
-  - scope — директория инструмента: `nvm`, `zsh`, `nvim`, `herdr`, `tmux`, `install`.
+  - scope — директория инструмента: `nvm`, `zsh`, `nvim`, `herdr`, `install`.
     Правка сразу по нескольким — scope можно опустить.
   - из типов тут реально нужны `feat` (новый конфиг или возможность),
     `fix` (сломанное поведение), `refactor` (перенос без смены поведения),
@@ -321,9 +320,8 @@ $DOTFILES/agents/skills/<имя>=$HOME/.agents/skills/<имя>
 
 - shell: `bash -n install/bootstrap.sh`, `zsh -n zsh/rc.zsh zsh/aliases.zsh`
 - lua: `stylua --check nvim/` (если stylua установлен)
-- tmux: `tmux source-file tmux/tmux.conf`
 - herdr: `herdr server reload-config` (подхватит `config.toml` в живом сервере)
-- симлинки: `ls -l ~/.zshrc ~/.tmux.conf ~/.config/nvim ~/.config/herdr/config.toml`
+- симлинки: `ls -l ~/.zshrc ~/.config/nvim ~/.config/herdr/config.toml`
   `~/.claude/settings.json`
 - скиллы Claude Code: `jq -e . ~/.claude/settings.json` и `/doctor` в живой сессии
 
