@@ -29,7 +29,8 @@ if [[ -n $WORK_EMAIL ]]; then
     unset git_work_config git_work_content
 fi
 
-source ~/.zprofile
+# login-шелл уже прочитал ~/.zprofile сам; повторный source задваивает PATH
+[[ -o login ]] || source ~/.zprofile
 
 # Дополнительные автодополнения Homebrew должны попасть в fpath до compinit из oh-my-zsh.
 fpath=(/opt/homebrew/share/zsh-completions $fpath)
