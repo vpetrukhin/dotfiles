@@ -25,6 +25,7 @@
 | `pi/`          | `settings.json`, `keybindings.json` → `~/.pi/agent/` (coding-агент pi) |
 | `git/`         | `config` и глобальный gitignore → `~/.config/git/` |
 | `gh/`          | `config.yml` → `~/.config/gh/config.yml` (GitHub CLI, алиасы) |
+| `npm/`         | `npmrc` → `~/.npmrc` (токен — из `$NPM_TOKEN`)     |
 | `hunk/`        | `config.toml` (терминальный просмотрщик диффов)   |
 | `claude/`      | `settings.json` и скиллы только для Claude Code    |
 | `agents/`      | скиллы, общие для всех агентов (Claude Code, pi)  |
@@ -148,6 +149,11 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - Из `~/.config/gh` версионируется только `config.yml`. `hosts.yml` (аккаунт,
   при `--insecure-storage` ещё и токен) не тащим. `gh config set` пишет
   в файл по тому же пути, симлинк не рвётся.
+- В `npm/npmrc` токен npmjs не хранится: там `${NPM_TOKEN?}`, значение — в
+  `~/.env.d/20-personal.sh`. `?` обязателен: без него npm падает на любой
+  команде, если переменная не задана. `npm login` и `npm config set` пишут
+  прямо в `~/.npmrc`, то есть в репозиторий, и затрут подстановку реальным
+  токеном — после них проверяй `git diff npm/`.
 - Скилл `todoist-cli` в репозиторий не кладём: его ставит и обновляет сам
   `td` (`td skill install <агент>`, `td skill update`), копия бы устарела.
 - Из `~/.config/hunk` версионируется только `config.toml`. `state.json` рядом —

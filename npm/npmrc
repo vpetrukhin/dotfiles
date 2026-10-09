@@ -1,0 +1,2 @@
+# requires NPM_TOKEN in ~/.env.d; «?» — без переменной npm подставит пустую строку, а не упадёт
+//registry.npmjs.org/:_authToken=${NPM_TOKEN?}
