@@ -24,6 +24,7 @@
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
 | `pi/`          | `settings.json`, `keybindings.json` → `~/.pi/agent/` (coding-агент pi) |
 | `git/`         | `config` и глобальный gitignore → `~/.config/git/` |
+| `gh/`          | `config.yml` → `~/.config/gh/config.yml` (GitHub CLI, алиасы) |
 | `hunk/`        | `config.toml` (терминальный просмотрщик диффов)   |
 | `claude/`      | `settings.json` и скиллы только для Claude Code    |
 | `agents/`      | скиллы, общие для всех агентов (Claude Code, pi)  |
@@ -144,6 +145,11 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
   `xterm-ghostty`. Если на удалённом хосте его нет, ставить его надо там
   (`infocmp -x | ssh host -- tic -x -`), а не откатывать `term` локально.
 - В `zsh/rc.zsh` есть абсолютные пути `/Users/vasyapetrukhin/...` (yandex-cloud, LM Studio).
+- Из `~/.config/gh` версионируется только `config.yml`. `hosts.yml` (аккаунт,
+  при `--insecure-storage` ещё и токен) не тащим. `gh config set` пишет
+  в файл по тому же пути, симлинк не рвётся.
+- Скилл `todoist-cli` в репозиторий не кладём: его ставит и обновляет сам
+  `td` (`td skill install <агент>`, `td skill update`), копия бы устарела.
 - Из `~/.config/hunk` версионируется только `config.toml`. `state.json` рядом —
   рантайм самого hunk (`lastSeenCliVersion`), в репозиторий не тащим.
 - Из `~/.config/herdr` версионируется только `config.toml` и свои плагины.
