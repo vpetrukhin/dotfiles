@@ -3,3 +3,4 @@ $DOTFILES/claude/output-styles/caveman.md=$HOME/.claude/output-styles/caveman.md
 $DOTFILES/claude/skills/convert-to-webp=$HOME/.claude/skills/convert-to-webp
 $DOTFILES/claude/skills/playwright-cli=$HOME/.claude/skills/playwright-cli
 $DOTFILES/claude/skills/design-review=$HOME/.claude/skills/design-review
+$DOTFILES/claude/statusline.sh=$HOME/.claude/statusline.sh

@@ -235,10 +235,13 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
 
 - `claude/settings.json` → `~/.claude/settings.json` — модель, `effortLevel`,
   тема, statusLine, `outputStyle`, включённые плагины.
+- `claude/statusline.sh` → `~/.claude/statusline.sh` — сам statusLine; в
+  `settings.json` только путь к нему. Проверка без живой сессии:
+  `echo '{"workspace":{"current_dir":"'$PWD'"},"model":{"display_name":"X"}}' | ~/.claude/statusline.sh`.
 - `claude/output-styles/<имя>.md` → `~/.claude/output-styles/<имя>.md` — свои
   output styles. Сейчас один — `caveman` (сжатые ответы), он же прописан в
   `outputStyle` в `settings.json`, то есть включён по умолчанию во всех сессиях.
-  Переключение на ходу — `/output-style`, текущий виден в statusLine (`Style:`).
+  Переключение на ходу — `/output-style`.
   Правила стиля скопированы из скилла `caveman` (`.agents/skills/caveman`) —
   апдейты скилла в стиль сами не приезжают, синхронизировать руками.
 - `claude/skills/<имя>` → `~/.claude/skills/<имя>` — по симлинку на каждый скилл
