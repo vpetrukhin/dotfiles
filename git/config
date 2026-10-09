@@ -1,0 +1,9 @@
+[user]
+	name = Vasya Petrukhin
+	email = vpetruin16@gmail.com
+
+# рабочие репозитории (включая воркдри — gitdir у них внутри основного репо)
+# берут email из $WORK_EMAIL: git не читает переменные окружения, поэтому
+# файл ~/.config/git/work генерирует zsh/rc.zsh
+[includeIf "gitdir:~/Development/bankiru/"]
+	path = ~/.config/git/work

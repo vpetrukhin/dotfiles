@@ -22,7 +22,7 @@
 | `yazi/`        | `yazi.toml`                                      |
 | `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
-| `git/`         | глобальный gitignore → `~/.config/git/ignore`    |
+| `git/`         | `config` и глобальный gitignore → `~/.config/git/` |
 | `hunk/`        | `config.toml` (терминальный просмотрщик диффов)   |
 | `claude/`      | `settings.json` и скиллы только для Claude Code    |
 | `agents/`      | скиллы, общие для всех агентов (Claude Code, pi)  |
@@ -118,6 +118,13 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - Глобальный gitignore линкуется в `~/.config/git/ignore`, а **не** в `~/.gitignore`:
   `core.excludesfile` нигде не задан, и git по умолчанию читает именно XDG-путь —
   симлинк на `~/.gitignore` не применялся вообще. Не «чинить» обратно.
+- Глобальный git-конфиг тоже по XDG-пути: `git/config` → `~/.config/git/config`.
+  Файла `~/.gitconfig` быть не должно — git читает его позже и он перебьёт
+  версионируемый. Личный `user.email` задан прямо в `git/config`, а для
+  `~/Development/bankiru/` его перебивает `[includeIf "gitdir:..."]` из
+  `~/.config/git/work`. Этот файл не версионируется: его пишет `zsh/rc.zsh`
+  из `$WORK_EMAIL` (git не читает переменные окружения). Нет `WORK_EMAIL` —
+  нет файла, и в рабочих репозиториях уйдёт личный email.
 - `keepassxc-cli` отдельной формулы в Homebrew не имеет и в `Brewfile` отдельной
   строкой не появится: его ставит каска `keepassxc` как Binary-артефакт —
   `/opt/homebrew/bin/keepassxc-cli` это симлинк внутрь `KeePassXC.app`. Не добавлять

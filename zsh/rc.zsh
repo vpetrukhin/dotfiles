@@ -17,6 +17,18 @@ for env_file in $HOME/.env.d/*.sh(N); do
 done
 unset env_file
 
+# рабочий email для git в ~/Development/bankiru (см. includeIf в git/config).
+# git не умеет читать env, поэтому кладём $WORK_EMAIL в файл; пишем только при изменении
+# requires WORK_EMAIL in ~/.env.d
+if [[ -n $WORK_EMAIL ]]; then
+    git_work_config=$HOME/.config/git/work
+    git_work_content=$'[user]\n\temail = '$WORK_EMAIL
+    if [[ ! -r $git_work_config || "$(<$git_work_config)" != "$git_work_content" ]]; then
+        print -r -- "$git_work_content" >| $git_work_config
+    fi
+    unset git_work_config git_work_content
+fi
+
 source ~/.zprofile
 
 # Дополнительные автодополнения Homebrew должны попасть в fpath до compinit из oh-my-zsh.
