@@ -94,6 +94,7 @@ brew "wget"
 brew "xh"
 # Blazing fast terminal file manager written in Rust, based on async I/O
 brew "yazi"
+brew "zsh"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
 # Additional completion definitions for zsh
