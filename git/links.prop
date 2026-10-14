@@ -1,2 +1,3 @@
 $DOTFILES/git/gitignore=$HOME/.config/git/ignore
 $DOTFILES/git/config=$HOME/.config/git/config
+$DOTFILES/git/work-shared=$HOME/.config/git/work-shared

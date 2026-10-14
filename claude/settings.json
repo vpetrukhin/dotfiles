@@ -21,11 +21,17 @@
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
       }
+    },
+    "biz-agent-kit": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/vasiliy/Development/bankiru/biz-agent-kit"
+      }
     }
   },
   "outputStyle": "caveman",
   "effortLevel": "high",
-  "theme": "dark",
+  "theme": "dark-daltonized",
   "mcpServers": {
     "figma-remote-mcp": {
       "type": "sse",

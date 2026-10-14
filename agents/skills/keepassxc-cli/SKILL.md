@@ -139,9 +139,55 @@ keepassxc-cli generate -L 24 -l -U -n -s
 например `id_ed25519` и `id_ed25519.pub`), парольная фраза ключа — в поле `Password`
 записи.
 
-Атрибут `KeeAgent.settings` (интеграция ssh-agent в GUI KeePassXC) из CLI 2.7.12
-проставить нельзя: у `add`/`edit` нет флага для произвольных атрибутов. Если он нужен —
-это делается руками в GUI. Для работы через этот скилл он не требуется.
+### Автозагрузка в агент при разблокировке базы (GUI-интеграция)
+
+Настройки вкладки «SSH Agent» записи KeePassXC хранит не атрибутом, а **вложением**
+`KeeAgent.settings` — XML в UTF-16LE без BOM. Поэтому из CLI его можно прочитать и
+заменить через `attachment-export` / `attachment-import -f`. Проверено на 2.7.12:
+после замены GUI подхватывает настройки и кладёт ключ в агент при разблокировке.
+
+Само включение интеграции (`Settings → SSH Agent → Enable SSH Agent integration`)
+делается только в GUI.
+
+Содержимое (поля, которые важны):
+
+```xml
+<AllowUseOfSshKey>true</AllowUseOfSshKey>
+<AddAtDatabaseOpen>true</AddAtDatabaseOpen>          <!-- добавить при разблокировке -->
+<RemoveAtDatabaseClose>true</RemoveAtDatabaseClose>  <!-- убрать при блокировке -->
+<UseLifetimeConstraintWhenAdding>false</UseLifetimeConstraintWhenAdding>
+<LifetimeConstraintDuration>600</LifetimeConstraintDuration>
+<Location>
+  <SelectedType>attachment</SelectedType>            <!-- или file -->
+  <AttachmentName>id_ed25519</AttachmentName>        <!-- имя вложения с приватным ключом -->
+  <FileName/>                                        <!-- путь, если SelectedType=file -->
+</Location>
+```
+
+Если вложение уже есть (галочки ставили в GUI) — правь его, а не пиши с нуля. Пример:
+переключить источник ключа на вложение `id_ed25519`:
+
+```bash
+PW=$(kp_pw)
+T=$(mktemp -d)
+printf '%s\n' "$PW" | keepassxc-cli attachment-export -q --stdout "$DB" "SSH/rabochiy" KeeAgent.settings \
+  | iconv -f UTF-16LE -t UTF-8 \
+  | sed -e 's#<SelectedType>file</SelectedType>#<SelectedType>attachment</SelectedType>#' \
+        -e 's#<AttachmentName/>#<AttachmentName>id_ed25519</AttachmentName>#' \
+  | iconv -f UTF-8 -t UTF-16LE > "$T/KeeAgent.settings"
+printf '%s\n' "$PW" | keepassxc-cli attachment-import -q -f "$DB" "SSH/rabochiy" KeeAgent.settings "$T/KeeAgent.settings"
+rm -rf "$T"
+```
+
+Если вложения нет — собери XML целиком: заголовок
+`<?xml version="1.0" encoding="UTF-16"?>`, корень `<EntrySettings>` с полями выше,
+перекодируй в UTF-16LE и импортируй без `-f`.
+
+Проверка: база открыта в GUI, затем `ssh-add -l` показывает ключ. Если ключа нет —
+открой вкладку «SSH Agent» записи и посмотри, что GUI прочитал.
+
+Если `SSH_AUTH_SOCK` в шелле переопределён (свой агент, мультиплексор терминала),
+GUI его не видит — путь нужно указать в `SSH_AUTH_SOCK override` настроек KeePassXC.
 
 ### Инвентаризация: что где лежит
 

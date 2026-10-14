@@ -7,3 +7,4 @@
 # файл ~/.config/git/work генерирует zsh/rc.zsh
 [includeIf "gitdir:~/Development/bankiru/"]
 	path = ~/.config/git/work
+	path = ~/.config/git/work-shared

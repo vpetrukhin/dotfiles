@@ -34,6 +34,8 @@ fi
 
 # Дополнительные автодополнения Homebrew должны попасть в fpath до compinit из oh-my-zsh.
 fpath=(/opt/homebrew/share/zsh-completions $fpath)
+# Homebrew делает /opt/homebrew/share группово-записываемым; доверяем каталогу и пропускаем compaudit.
+ZSH_DISABLE_COMPFIX=true
 source $ZSH/oh-my-zsh.sh
 
 # строго после oh-my-zsh: он определяет свои ls/ll/la и затирает наши
