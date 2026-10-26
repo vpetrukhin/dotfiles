@@ -1,5 +1,12 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/vasiliy/.docker/bin"
+# End of Docker Desktop section.
+
 # login-шелл: PATH, MANPATH и прочее от Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # CLI Obsidian
 export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
+
+# Hermes Agent command
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac

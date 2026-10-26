@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "1.1.0",
+  "lastChangelogVersion": "1.4.0",
   "theme": "dark",
   "defaultProvider": "openai",
   "defaultModel": "gpt-6-luna",
@@ -9,7 +9,8 @@
     "npm:pi-powerline-footer",
     "npm:pi-mcp-adapter",
     "npm:@plannotator/pi-extension",
-    "npm:pi-lens"
+    "npm:pi-lens",
+    "npm:@tintinweb/pi-subagents"
   ],
   "extensions": [
     "-builtin:mcp"

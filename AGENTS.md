@@ -260,8 +260,10 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
   апдейты скилла в стиль сами не приезжают, синхронизировать руками.
 - `claude/skills/<имя>` → `~/.claude/skills/<имя>` — по симлинку на каждый скилл
   отдельно, а не на всю директорию: рядом в `~/.claude/skills` лежат чужие
-  симлинки (`herdr`, `hunk-review` → `~/.agents/skills`, `biz-agent-kit` →
-  рабочий репозиторий), их трогать нельзя.
+  скиллы — симлинки (`herdr`, `hunk-review` → `~/.agents/skills`) и копии
+  командных скиллов, которые ставит `npm run install-skills` из рабочего
+  репозитория `~/Development/bankiru/claude` (манифест —
+  `~/.claude/banki-team-config/installed.json`), их трогать нельзя.
 
 Скиллы с рабочими внутренностями лежат в `private/claude/` (см. ниже).
 Не версионируется вообще: `settings.local.json` (он в глобальном gitignore)

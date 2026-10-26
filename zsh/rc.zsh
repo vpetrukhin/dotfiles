@@ -44,6 +44,7 @@ source_if_exists $DOTFILES/zsh/jira.zsh
 
 export PATH=/opt/homebrew/bin:$PATH
 export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:${PATH}
+export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
 
 # nvm — строго после export PATH, иначе node из nvm перекроется системным
 source_if_exists $DOTFILES/nvm/init.zsh
@@ -72,3 +73,6 @@ if [ -f '/Users/vasyapetrukhin/yandex-cloud/path.bash.inc' ]; then source '/User
 
 # The next line enables shell command completion for yc.
 if [ -f '/Users/vasyapetrukhin/yandex-cloud/completion.zsh.inc' ]; then source '/Users/vasyapetrukhin/yandex-cloud/completion.zsh.inc'; fi
+
+# Hermes Agent command
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac

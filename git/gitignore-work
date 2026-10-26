@@ -1,0 +1,24 @@
+# ignore для рабочих репозиториев ~/Development/bankiru (core.excludesFile в work-shared).
+# git читает только один excludesFile, поэтому здесь копия глобального gitignore + рабочие правила.
+# Меняешь глобальный gitignore — продублируй сюда.
+
+
+*.swp
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# локальные настройки агентов #
+###############################
+**/.claude/settings.local.json
+
+# планы и отчёты агентов (task-plan, test-planner, test-runner) #
+##################################################################
+/plans/

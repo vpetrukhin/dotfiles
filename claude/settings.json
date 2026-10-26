@@ -12,7 +12,6 @@
   },
   "enabledPlugins": {
     "typescript-lsp@claude-plugins-official": true,
-    "biz-agent-kit@biz-agent-kit": true,
     "figma@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
@@ -20,12 +19,6 @@
       "source": {
         "source": "github",
         "repo": "anthropics/claude-plugins-official"
-      }
-    },
-    "biz-agent-kit": {
-      "source": {
-        "source": "directory",
-        "path": "/Users/vasiliy/Development/bankiru/biz-agent-kit"
       }
     }
   },

@@ -17,7 +17,7 @@ description: "Сверить вёрстку с макетом Figma: скрин�
 | Что               | Чем                                                                 |
 | ----------------- | ------------------------------------------------------------------- |
 | Макет             | Figma MCP: `get_screenshot`, `get_design_context`, `get_variable_defs` |
-| Макет (fallback)  | REST через скилл `biz-agent-kit:figma`, если MCP недоступен         |
+| Макет (fallback)  | REST через скилл `figma`, если MCP недоступен                       |
 | Страница          | скилл `playwright-cli` (`resize`, `screenshot`, `eval`)             |
 
 Браузер — `playwright-cli`, а не chrome-devtools MCP: у playwright-cli есть именованные

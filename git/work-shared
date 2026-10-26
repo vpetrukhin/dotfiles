@@ -2,3 +2,6 @@
 # (email живёт в генерируемом ~/.config/git/work — см. zsh/rc.zsh)
 [push]
 	useForceIfIncludes = false
+
+[core]
+	excludesFile = ~/.config/git/ignore-work
