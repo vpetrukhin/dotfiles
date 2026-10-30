@@ -20,6 +20,7 @@ alias lt='eza --tree --level=2 --icons'
 # requires WORK_EMAIL in ~/.env.d
 alias copyWorkPass='keepassxc-cli clip ~/workPass.kdbx "$WORK_EMAIL"'
 
+# requires BANKIRU_WORKSPACE_PATH in ~/.env.d
 alias work_notes='nvim "$BANKIRU_WORKSPACE_PATH"'
 
 # jira-cli — в zsh/jira.zsh
