@@ -37,6 +37,8 @@ return {
       return {
         legacy_commands = false,
         workspaces = get_workspaces(),
+        -- имя файла из заголовка (slug), а не timestamp-id; при совпадении добавляется -2, -3…
+        note_id_func = require("obsidian.builtin").title_id,
       }
     end,
   },
