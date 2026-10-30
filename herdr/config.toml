@@ -44,6 +44,12 @@ type = "plugin_action"
 command = "vpetrukhin.nvim.open-tab"
 description = "open nvim in a new tab"
 
+[[keys.command]]              # open in a new tab; prefix+shift+n занят new_workspace
+key = "prefix+shift+o"
+type = "plugin_action"
+command = "vpetrukhin.nvim.new-note"
+description = "new bankiru note in a new tab"
+
 [ui]
 agent_panel_sort = "spaces"
 

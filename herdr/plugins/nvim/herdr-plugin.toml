@@ -2,7 +2,7 @@ id = "vpetrukhin.nvim"
 name = "Neovim"
 version = "0.1.0"
 min_herdr_version = "0.8.0"
-description = "Открыть nvim в отдельной вкладке herdr"
+description = "Открыть nvim или новую заметку bankiru в отдельной вкладке herdr"
 platforms = ["macos"]
 
 [[build]]
@@ -14,8 +14,22 @@ title = "nvim"
 placement = "tab"
 command = ["bash", "-c", "exec nvim"]
 
+# новая заметка Obsidian: obsidian.nvim кладёт её в cwd, если он внутри волта
+[[panes]]
+id = "note"
+title = "note"
+placement = "tab"
+command = ["bash", "-c", "exec nvim -c 'autocmd UIEnter * ++once lua vim.schedule(function() vim.cmd(\"Obsidian new\") end)'"]
+
 [[actions]]
 id = "open-tab"
 title = "Open nvim (new tab)"
 contexts = ["workspace"]
 command = ["bash", "-c", "DIR=\"$(bash \"$HERDR_PLUGIN_ROOT/bin/resolve-dir.sh\")\"; exec \"${HERDR_BIN_PATH:-herdr}\" plugin pane open --plugin vpetrukhin.nvim --entrypoint nvim --placement tab --cwd \"$DIR\" --focus"]
+
+# requires BANKIRU_WORKSPACE_PATH in ~/.env.d: сервер herdr мог стартовать без него
+[[actions]]
+id = "new-note"
+title = "New bankiru note (new tab)"
+contexts = ["workspace"]
+command = ["bash", "-c", "[ -n \"${BANKIRU_WORKSPACE_PATH:-}\" ] || . \"$HOME/.env.d/10-work.sh\"; exec \"${HERDR_BIN_PATH:-herdr}\" plugin pane open --plugin vpetrukhin.nvim --entrypoint note --placement tab --cwd \"$BANKIRU_WORKSPACE_PATH/notes\" --focus"]
