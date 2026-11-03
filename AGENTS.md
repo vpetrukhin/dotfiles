@@ -19,7 +19,8 @@
 | `nvim_minimal/`| минимальный отдельный конфиг для быстрых правок  |
 | `ghostty/`     | `config` (эмулятор терминала)                    |
 | `yazi/`        | `yazi.toml`                                      |
-| `nvm/`         | дефолтная версия node, `default-packages`, `init.zsh` |
+| `mise/`        | `config.toml` → `~/.config/mise/config.toml` (node и глобальные npm-инструменты) |
+| `nvm/`         | legacy nvm: `default-alias`, `default-packages`, `init.zsh` (не подключён, оставлен для отката) |
 | `herdr/`       | `config.toml` (терминальный мультиплексор для агентов) |
 | `pi/`          | `settings.json`, `keybindings.json` → `~/.pi/agent/` (coding-агент pi) |
 | `git/`         | `config` и глобальный gitignore → `~/.config/git/` |
@@ -91,7 +92,7 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - **Коммиты** — по Conventional Commits, оформляем через локальный скилл `git-commit`:
   `<type>(<scope>): <описание>`. Заголовок английский, в императиве, строчными,
   до 72 символов; тело — по-русски и только когда есть что объяснить.
-  - scope — директория инструмента: `nvm`, `zsh`, `nvim`, `herdr`, `install`.
+  - scope — директория инструмента: `mise`, `nvm`, `zsh`, `nvim`, `herdr`, `install`.
     Правка сразу по нескольким — scope можно опустить.
   - из типов тут реально нужны `feat` (новый конфиг или возможность),
     `fix` (сломанное поведение), `refactor` (перенос без смены поведения),
@@ -165,9 +166,59 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
   `persiyanov.reviewr`, которые сейчас не установлены (`herdr plugin list`) —
   это не опечатка, а неактивные горячие клавиши.
 
-## nvm
+## Node (mise)
 
-Версионируется три файла:
+Основной менеджер node — mise (`brew "mise"`). nvm оставлен только для отката,
+см. раздел ниже.
+
+Версионируется один файл: `mise/config.toml` → `~/.config/mise/config.toml`
+(глобальный конфиг mise).
+
+- `[tools]` — `node = "24"` (тот же мажор, что был дефолтом в nvm) и CLI,
+  которые раньше ставились глобально через `nvm/default-packages`, теперь
+  отдельными инструментами npm-бэкенда: `npm:typescript`,
+  `npm:typescript-language-server`, `npm:vscode-langservers-extracted`,
+  `npm:@earendil-works/pi-coding-agent`, `npm:@doist/todoist-cli`. Все — `latest`.
+  Отдельный `npm:`-инструмент, а не `npm install -g`, нужен потому, что глобальные
+  пакеты живут внутри конкретной версии node и пропадают при её смене, а
+  npm-бэкенд даёт каждому CLI свой shim. Новый такой CLI добавляется строкой
+  `"npm:<пакет>" = "latest"` и потом `mise install`.
+- `[settings] idiomatic_version_file_enable_tools = ["node"]` — mise читает
+  `.nvmrc` в проектах (замена хука `load-nvmrc` из `nvm/init.zsh`).
+
+В `zsh/rc.zsh` mise подключается через `eval "$(mise activate zsh)"` **после
+всех `export PATH=...`** — это принципиально: activate добавляет каталоги инструментов в
+начало PATH, иначе node и npm-инструменты из mise перекрываются системными и
+brew. Не переноси этот блок выше по файлу. Загрузка `~/.env.d` остаётся в начале
+файла, как была.
+
+Установка объявленных инструментов: `mise install` (из любого каталога, конфиг
+глобальный). Проверка: `zsh -i -c 'which node; node -v; mise current'` — node
+должен быть из `~/.local/share/mise/installs/node/...`.
+
+Не версионируется: рантайм и кэши mise (`~/.local/share/mise`,
+`~/.local/state/mise`). `~/.config/mise/config.toml` — симлинк из репозитория,
+другие файлы рядом (если появятся) в git не тащим.
+
+В корне репозитория лежит отдельный проектный `mise.toml` — только задачи
+проверки (см. «Проверка изменений»), инструментов он не задаёт и глобальный
+конфиг не заменяет.
+
+Свежие релизы `mise upgrade` может не подтянуть: действует `minimum_release_age`
+(по умолчанию 24 ч), в выводе будет `WARN ... ignored by minimum_release_age`.
+Если версия нужна раньше, ставим явно — `mise install npm:<пакет>@<версия>`
+(явный пин ограничение обходит), декларацию при этом можно оставить `latest`.
+Так обновлён pi с 1.4.0 до 1.5.0.
+
+## nvm (legacy)
+
+nvm больше не грузится из `rc.zsh` (строка со `source_if_exists
+$DOTFILES/nvm/init.zsh` закомментирована) и node не активирует: его заменил mise.
+Файлы, brew-пакет `nvm` и алиас `default` сохранены как состояние для отката, не
+удалять. Откат: раскомментировать `source` в `rc.zsh` и убрать блок с
+`mise activate`, иначе оба менеджера будут бороться за PATH.
+
+Версионируются три файла (нужны для отката):
 
 - `nvm/default-alias` → `~/.nvm/alias/default` — **дефолтная версия node**.
   Сейчас там `24`: nvm резолвит это в самую свежую установленную v24.x
@@ -181,8 +232,9 @@ $DOTFILES/<путь-в-репо>=$HOME/<путь-назначения>
 - `nvm/init.zsh` — загрузка `nvm.sh`, completion и хук `load-nvmrc`
   (автопереключение по `.nvmrc` при `cd`, возврат на default при выходе).
 
-`init.zsh` подключается из `rc.zsh` **после всех `export PATH=...`** — это
-принципиально. `nvm.sh` при загрузке сам активирует default и кладёт свой bin
+`init.zsh` (когда его включат обратно) подключается из `rc.zsh` **после всех
+`export PATH=...`** — это принципиально. `nvm.sh` при загрузке сам активирует
+default и кладёт свой bin
 в начало PATH; если после этого дописать PATH руками (как было раньше),
 node из nvm перекрывается системным и `nvm current` показывает `system`.
 Не переноси `source_if_exists $DOTFILES/nvm/init.zsh` выше по файлу.
@@ -190,7 +242,8 @@ node из nvm перекрывается системным и `nvm current` п�
 `nvm.sh` ищется по списку: git-клон в `$NVM_DIR`, затем brew
 (`/opt/homebrew`, `/usr/local`) — берётся первый живой.
 
-Проверка: `zsh -i -c 'which node; nvm current; nvm version default'`.
+Проверка при откате: `zsh -i -c 'which node; nvm current; nvm version default'`.
+Сейчас эта проверка ожидаемо покажет node из mise, а не из nvm.
 
 ## Herdr
 
@@ -287,6 +340,14 @@ pi сам пишет в `settings.json` (например `lastChangelogVersion`
 симлинк не рвётся, а правка просто приезжает в репозиторий диффом.
 Блокировку `proper-lockfile` ставит рядом с симлинком, это не мусор.
 
+pi ставится двумя путями: npm-инструментом mise (`npm:@earendil-works/pi-coding-agent`
+— его видит новый интерактивный zsh) и self-update установкой самого pi
+(`pi update`, релизы в `~/.pi/agent/install/`, лаунчер `~/.pi/agent/bin/pi`).
+Версии могут разъезжаться; `mise run doctor` показывает оба пути и ошибкой это
+не считает. Если pi запущен из mise, `pi update` сам себя не обновит (пакетом
+владеет mise) — обновляй `mise upgrade`; managed-установка обновляется через
+`pi update`. Не двумя способами сразу.
+
 ## Общие скиллы агентов (`agents/`)
 
 Скиллы, не завязанные на конкретный harness, лежат в `agents/skills/<имя>/SKILL.md`
@@ -302,7 +363,8 @@ $DOTFILES/agents/skills/<имя>=$HOME/.agents/skills/<имя>
 
 - `~/.claude/skills/` — откуда читает Claude Code.
 - `~/.agents/skills/` — общий каталог стандарта; оттуда читает `pi`
-  (`@earendil-works/pi-coding-agent`, ставится через `nvm/default-packages`), а также
+  (`@earendil-works/pi-coding-agent`, ставится как `npm:`-инструмент из
+  `mise/config.toml`), а также
   туда кладут свои скиллы herdr и hunk. Настройки pi для этого править не надо —
   каталог в списке источников по умолчанию (`pi` → `docs/skills.md`, раздел Locations).
 
@@ -319,13 +381,29 @@ $DOTFILES/agents/skills/<имя>=$HOME/.agents/skills/<имя>
 
 ## Проверка изменений
 
-Автотестов нет, проверяем руками:
+Автотестов нет. Базовые проверки — задачи проектного `mise.toml` (запускаются
+из корня репозитория при любом cwd; один раз может понадобиться
+`mise trust mise.toml`, `trust --all` не используем):
 
-- shell: `bash -n install/bootstrap.sh`, `zsh -n zsh/rc.zsh zsh/aliases.zsh`
+- `mise run check` — `check:shell` (`bash -n` для всех `*.sh`, `zsh -n` для
+  `*.zsh` и `zprofile`), `check:json` (`jq -e` для всех `*.json` под git) и
+  `git diff --check`. Ничего не устанавливает, файлы не меняет, `private/`
+  и runtime-каталоги не сканирует. Файл с комментариями — не строгий JSON:
+  если такой появится, его надо явно исключить из `check:json`, а не ослаблять `jq`.
+- `mise run doctor` — сверяет симлинки со всеми `links.prop` (кроме `private/`),
+  проверяет обязательные команды и фактические пути node/npm/pi. Только
+  диагностика: не исправляет, `[fail]` → exit 1, `[warn]` — необязательные
+  команды и известные особенности, то есть не регрессии. `$DOTFILES`/`$HOME`
+  в `links.prop` раскрываются без `eval`.
+
+Скрипты задач — `mise/check-shell.sh`, `mise/check-json.sh`, `mise/doctor.sh`.
+
+Остальное — руками:
+
 - lua: `stylua --check nvim/` (если stylua установлен)
 - herdr: `herdr server reload-config` (подхватит `config.toml` в живом сервере)
 - симлинки: `ls -l ~/.zshrc ~/.config/nvim ~/.config/herdr/config.toml`
-  `~/.claude/settings.json`
+  `~/.claude/settings.json` (или `mise run doctor`)
 - скиллы Claude Code: `jq -e . ~/.claude/settings.json` и `/doctor` в живой сессии
 
 Правки в `~/.zshrc` подхватываются в новом шелле или после `source ~/.zshrc`.

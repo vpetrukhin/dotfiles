@@ -46,8 +46,9 @@ export PATH=/opt/homebrew/bin:$PATH
 export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:${PATH}
 export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
 
-# nvm — строго после export PATH, иначе node из nvm перекроется системным
-source_if_exists $DOTFILES/nvm/init.zsh
+# nvm больше не грузится: node и глобальные npm-инструменты ведёт mise (см. mise/config.toml).
+# Файлы nvm/ оставлены в репозитории для отката; вернуть — раскомментировать строку.
+# source_if_exists $DOTFILES/nvm/init.zsh
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -76,3 +77,9 @@ if [ -f '/Users/vasyapetrukhin/yandex-cloud/completion.zsh.inc' ]; then source '
 
 # Hermes Agent command
 case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
+
+# mise — строго после всех `export PATH=...`: activate добавляет каталоги инструментов в начало PATH,
+# иначе node и npm-инструменты из mise перекрываются системными
+if command -v mise >/dev/null 2>&1; then
+    eval "$(mise activate zsh)"
+fi

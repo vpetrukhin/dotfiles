@@ -46,17 +46,14 @@
 
    Скрипт берёт пары источник/назначение из `*/links.prop`, создаёт отсутствующие каталоги и файлы `~/.env.d`, а для уже существующих целей спрашивает `skip`, `overwrite` или `backup`. Запускай в интерактивном терминале; перед `overwrite` проверь, что старый конфиг не нужен. Повторный запуск пропускает уже правильные симлинки. Если репозиторий лежит не в `~/dotfiles`, путь в `~/.env.d/00-core.sh` скрипт определит сам.
 
-5. **Установи Node через nvm и открой новый терминал.** Алиас `default` берётся из `nvm/default-alias`, глобальные пакеты — из `nvm/default-packages`:
+5. **Установи инструменты через mise и открой новый терминал.** Node и npm-CLI (TypeScript, LSP-серверы, pi, todoist) описаны в `mise/config.toml`; шаг 4 уже поставил на него симлинк `~/.config/mise/config.toml`:
 
    ```bash
-   source ~/.env.d/00-core.sh
-   export NVM_DIR="$HOME/.nvm"
-   source /opt/homebrew/opt/nvm/nvm.sh
-   nvm install 24
-   zsh -i -c 'which node; nvm current; nvm version default'
+   mise install
+   zsh -i -c 'which node; node -v; mise current'
    ```
 
-   Если nvm установлен в другом месте, используй путь к его `nvm.sh`; `nvm/init.zsh` умеет искать git-клон в `~/.nvm` и brew в `/opt/homebrew` или `/usr/local`.
+   `node` должен быть из `~/.local/share/mise/installs/node/…`. Версия в проектах переключается по `.nvmrc` — mise включён как idiomatic version file. nvm больше не используется и оставлен только для отката: `nvm/` и пакет из `Brewfile` не удаляй, подробности — в AGENTS.md.
 
 6. **Донастрой отдельные инструменты при необходимости.** Полный конфиг `nvim/` и минимальный `nvim_minimal/` подключаются через bootstrap. Локальные плагины Herdr не регистрируются через симлинки конфига — подключи их отдельно:
 
@@ -71,8 +68,10 @@
 
    ```bash
    ls -l ~/.zshrc ~/.config/nvim ~/.config/ghostty/config ~/.config/git/config ~/.config/herdr/config.toml
-   zsh -i -c 'echo "$DOTFILES"; nvm current'
+   zsh -i -c 'echo "$DOTFILES"; node -v; mise current'
    ```
+
+   Либо проверь всё сразу диагностикой из корня репозитория: `mise run doctor`.
 
 ## Перенос произвольной папки
 
@@ -94,5 +93,18 @@
 brew install <package>
 brew bundle dump --force --file=install/Brewfile
 ```
+
+Глобальные CLI обновляются через mise, а не `npm install -g`: `mise upgrade` (список — `mise/config.toml`).
+
+## Проверки
+
+В корне репозитория есть проектный `mise.toml` с задачами; инструментов он не задаёт и глобальный конфиг не заменяет. Задачи сами переходят в корень репозитория, откуда бы их ни вызвали:
+
+```bash
+mise run check      # bash -n/zsh -n для shell-конфигов, jq -e для JSON, git diff --check
+mise run doctor     # симлинки по links.prop, обязательные команды, пути node/npm/pi
+```
+
+`check` ничего не устанавливает и не меняет файлы; `private/` и runtime-каталоги не сканируются. `doctor` — только диагностика: найденные расхождения исправляются вручную (`./install/bootstrap.sh`), `[warn]` про необязательные команды — не регрессия. Первый запуск задач может потребовать `mise trust mise.toml` (доверяем только этому конфигу).
 
 Подробнее об устройстве конфигов и ограничениях — в [AGENTS.md](AGENTS.md).

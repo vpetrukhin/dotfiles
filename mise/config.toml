@@ -1,0 +1,16 @@
+# Глобальный конфиг mise: версия node и CLI-инструменты, которые раньше ставил nvm.
+# Подключается симлинком в ~/.config/mise/config.toml (см. mise/links.prop).
+# Node ставится под управлением mise, npm-пакеты — отдельными npm:-инструментами,
+# чтобы они переживали смену версии node и получали собственные shims.
+
+[tools]
+node = "24"
+"npm:typescript" = "latest"
+"npm:typescript-language-server" = "latest"
+"npm:vscode-langservers-extracted" = "latest"
+"npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:@doist/todoist-cli" = "latest"
+
+[settings]
+# читать .nvmrc в проектах как idiomatic version file (замена load-nvmrc из nvm)
+idiomatic_version_file_enable_tools = ["node"]

@@ -1,0 +1,24 @@
+# Проектный конфиг mise для самих dotfiles: проверки и диагностика.
+# Инструменты (node, npm-CLI) описаны отдельно — в mise/config.toml, который
+# линкуется в ~/.config/mise/config.toml. Глобальный config сюда не переносим.
+#
+# Задачи запускаются из корня репозитория: mise берёт за cwd каталог с mise.toml.
+# Ничего не устанавливают, не чинят и не перезапускают — только читают и проверяют.
+
+[tasks.check]
+description = "Все безопасные проверки репозитория"
+depends = ["check:shell", "check:json"]
+# Пробелы и маркеры конфликтов в незакоммиченных правках.
+run = "git diff --check"
+
+[tasks."check:shell"]
+description = "Синтаксис shell-конфигов репозитория (bash -n, zsh -n)"
+file = "mise/check-shell.sh"
+
+[tasks."check:json"]
+description = "Валидность версионируемых JSON (jq -e)"
+file = "mise/check-json.sh"
+
+[tasks.doctor]
+description = "Диагностика симлинков, команд и путей Node/CLI (ничего не исправляет)"
+file = "mise/doctor.sh"
