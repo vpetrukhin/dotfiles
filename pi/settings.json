@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "1.4.0",
+  "lastChangelogVersion": "1.5.0",
   "theme": "dark",
   "defaultProvider": "openai",
   "defaultModel": "gpt-6-luna",
@@ -15,5 +15,12 @@
   "extensions": [
     "-builtin:mcp"
   ],
-  "deviceId": "3fc450b8-a614-4813-a815-4a9bfe26d9f0"
+  "deviceId": "3fc450b8-a614-4813-a815-4a9bfe26d9f0",
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.46.0",
+    "{\"source\":\"npm:pi-powerline-footer\",\"scope\":\"user\"}": "0.22.0",
+    "{\"source\":\"npm:pi-mcp-adapter\",\"scope\":\"user\"}": "7.0.1",
+    "{\"source\":\"npm:pi-lens\",\"scope\":\"user\"}": "4.4.8",
+    "{\"source\":\"npm:@tintinweb/pi-subagents\",\"scope\":\"user\"}": "0.23.0"
+  }
 }
