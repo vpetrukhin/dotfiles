@@ -4,7 +4,9 @@
 # чтобы они переживали смену версии node и получали собственные shims.
 
 [tools]
-node = "24"
+# 24.22 — ветка Node с октябрьскими TLS-фиксами 2026 (нужна 24.22.1+),
+# патч внутри ветки не пиним: mise берёт самую свежую установленную 24.22.x.
+node = "24.22"
 "npm:typescript" = "latest"
 "npm:typescript-language-server" = "latest"
 "npm:vscode-langservers-extracted" = "latest"
