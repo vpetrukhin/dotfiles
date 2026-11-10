@@ -50,8 +50,21 @@ type = "plugin_action"
 command = "vpetrukhin.nvim.new-note"
 description = "new bankiru note in a new tab"
 
+[[keys.command]]              # open in a new tab; prefix+shift+d занят close_workspace
+key = "prefix+shift+b"
+type = "plugin_action"
+command = "vpetrukhin.dashboard.open-tab"
+description = "open jira/bitbucket dashboard in a new tab"
+
 [ui]
 agent_panel_sort = "spaces"
+
+# счётчики дашборда: задачи спринта, мои PR (✗ — упавшие сборки), PR на ревью
+tab_bar_right = [
+  { type = "command", command = ". \"$HOME/.env.d/00-core.sh\" && exec \"$DOTFILES/herdr/plugins/dashboard/bin/dashboard.sh\" status", interval_seconds = 1800, timeout_seconds = 30 },
+  { type = "datetime", format = "%H:%M" },
+]
+tab_bar_right_separator = "  "
 
 # herdr-automatic-rename: промпт имени новой вкладки считается ручным переименованием
 # и отключает автонейминг для этой вкладки

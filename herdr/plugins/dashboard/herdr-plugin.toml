@@ -1,0 +1,28 @@
+id = "vpetrukhin.dashboard"
+name = "Dashboard"
+version = "0.1.0"
+min_herdr_version = "0.8.0"
+description = "Задачи спринта из Jira и PR из Bitbucket: вкладка с двумя панелями fzf"
+platforms = ["macos"]
+
+[[build]]
+command = ["bash", "-c", "for t in fzf jq hunk; do command -v $t >/dev/null 2>&1 || brew install $t; done"]
+
+[[panes]]
+id = "jira"
+title = "jira"
+placement = "tab"
+command = ["bash", "-c", "exec \"$HERDR_PLUGIN_ROOT/bin/dashboard.sh\" ui jira"]
+
+[[panes]]
+id = "prs"
+title = "prs"
+placement = "split"
+command = ["bash", "-c", "exec \"$HERDR_PLUGIN_ROOT/bin/dashboard.sh\" ui prs"]
+
+# вкладка с двумя панелями: задачи слева, PR справа
+[[actions]]
+id = "open-tab"
+title = "Open dashboard (new tab)"
+contexts = ["workspace"]
+command = ["bash", "-c", "exec \"$HERDR_PLUGIN_ROOT/bin/open.sh\""]

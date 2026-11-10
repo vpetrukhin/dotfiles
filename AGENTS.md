@@ -267,6 +267,7 @@ node из nvm перекрывается системным и `nvm current` п�
 herdr plugin link "$DOTFILES/herdr/plugins/lazygit"
 herdr plugin link "$DOTFILES/herdr/plugins/hunk"
 herdr plugin link "$DOTFILES/herdr/plugins/nvim"
+herdr plugin link "$DOTFILES/herdr/plugins/dashboard"
 ```
 
 После этого `plugin_root` указывает в репозиторий, и правки манифеста
@@ -279,7 +280,7 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
 - типы — `shell` (фоном), `pane` (временная панель), `popup` (модальный терминал),
   `plugin_action`. Отдельного типа «открыть во вкладке» нет — вкладку даёт
   только плагин через `placement = "tab"`, ради этого и заведены
-  `plugins/lazygit`, `plugins/hunk` и `plugins/nvim`.
+  `plugins/lazygit`, `plugins/hunk`, `plugins/nvim` и `plugins/dashboard`.
 - дефолтные сочетания herdr занимают почти все `prefix+<буква>`
   (`prefix+g` — goto, `prefix+shift+g` — new_worktree и т.д.). Полный список
   закомментирован в эталонном конфиге внутри бинарника; конфликт `herdr config check`
@@ -289,6 +290,24 @@ herdr plugin link "$DOTFILES/herdr/plugins/nvim"
   не давал вообще ничего. Свободные `prefix+shift+<буква>` работают надёжно.
 - сработавшие биндинги видно в `herdr plugin log list` — если записи нет,
   нажатие не дошло до herdr, и дело не в плагине.
+
+Плагин `dashboard` (`prefix+shift+b`) — вкладка из двух панелей с fzf: слева
+задачи открытого спринта из Jira, справа мои PR и PR, ждущие моего апрува, из
+Bitbucket. Вкладку собирает `bin/open.sh`: панель `jira` с `placement = "tab"`,
+к ней сплитом справа панель `prs`. Действия — в шапке каждого fzf (открыть,
+`jira issue move`, diff PR в `hunk patch`, апрув с подтверждением). Внизу
+панели PR — все открытые PR, сгруппированные по репозиториям. Список
+репозиториев не версионируется (имена рабочих репозиториев): файл `repos` в
+`herdr plugin config-dir vpetrukhin.dashboard`, строка `PROJECT/slug`, `#` —
+комментарий; читается при каждой загрузке, перезапуск не нужен. Данные
+кэшируются в `~/.cache/herdr-dashboard`, у каждой панели свой цикл обновления
+раз в 30 минут (`DASHBOARD_INTERVAL`, с); после закрытия вкладки цикл
+завершается в течение 10 с.
+Тот же скрипт с аргументом `status` выводит счётчики в `[ui] tab_bar_right`:
+herdr запускает его через `/bin/sh -lc` без zsh-окружения, поэтому скрипт сам
+дописывает brew в PATH и подгружает `~/.env.d/10-work.sh`. В скрипте нет хостов
+и ключей проектов: сервер Jira берётся из конфига jira-cli, Bitbucket — из
+`$BITBUCKET_URL`, выборку задач можно переопределить через `DASHBOARD_JIRA_JQL`.
 
 Ссылки в панелях (и обычные URL, и OSC 8, как в `jira-table` из `zsh/jira.zsh`)
 открываются по **ctrl+клику**, а не по cmd+клику: herdr захватывает мышь
