@@ -332,8 +332,16 @@ ui() {
     exit 1
     ;;
   esac
+  # vim-навигация: по умолчанию поле ввода скрыто и работают j/k/g/G,
+  # / открывает поиск, esc сбрасывает его и возвращает навигацию
+  local nav=j,k,g,G,/
+  header="j/k g/G / поиск · $header"
   exec fzf --ansi --no-sort --layout=reverse --delimiter='\t' --with-nth=4 \
     --listen --prompt="$section> " --info=inline-right --cycle --header="$header" \
+    --no-input \
+    --bind="j:down,k:up,g:first,G:last" \
+    --bind="/:show-input+unbind($nav)" \
+    --bind="esc:clear-query+hide-input+rebind($nav)" \
     --preview="'$SELF' preview {1} {2}" --preview-window='down,40%,wrap' \
     --bind="start:reload('$SELF' list $section)+execute-silent('$SELF' loop $section \$FZF_PORT >/dev/null 2>&1 &)" \
     --bind="enter:execute-silent('$SELF' act open {1} {2} {3})" \

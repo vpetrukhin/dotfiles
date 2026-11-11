@@ -309,7 +309,10 @@ herdr plugin link "$DOTFILES/herdr/plugins/dashboard"
 `pre_grooming` (без уже попавших в спринт), справа мои PR и PR, ждущие моего апрува, из
 Bitbucket. Вкладку собирает `bin/open.sh`: панель `jira` с `placement = "tab"`,
 к ней сплитом справа панель `prs`. Действия — в шапке каждого fzf (открыть,
-`jira issue move`, diff PR в `hunk patch`, апрув с подтверждением). Внизу
+`jira issue move`, diff PR в `hunk patch`, апрув с подтверждением).
+Навигация по-vim: поле ввода скрыто (`--no-input`), работают `j/k/g/G`;
+`/` открывает поиск и отключает эти клавиши, `esc` сбрасывает запрос и
+возвращает навигацию — поэтому `esc` панель не закрывает. Внизу
 панели PR — все открытые PR, сгруппированные по репозиториям. Список
 репозиториев не версионируется (имена рабочих репозиториев): файл `repos` в
 `herdr plugin config-dir vpetrukhin.dashboard`, строка `PROJECT/slug`, `#` —
