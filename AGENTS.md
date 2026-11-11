@@ -305,7 +305,8 @@ herdr plugin link "$DOTFILES/herdr/plugins/dashboard"
   нажатие не дошло до herdr, и дело не в плагине.
 
 Плагин `dashboard` (`prefix+shift+b`) — вкладка из двух панелей с fzf: слева
-задачи открытого спринта из Jira, справа мои PR и PR, ждущие моего апрува, из
+задачи открытого спринта из Jira и ниже мои задачи с лейблом
+`pre_grooming` (без уже попавших в спринт), справа мои PR и PR, ждущие моего апрува, из
 Bitbucket. Вкладку собирает `bin/open.sh`: панель `jira` с `placement = "tab"`,
 к ней сплитом справа панель `prs`. Действия — в шапке каждого fzf (открыть,
 `jira issue move`, diff PR в `hunk patch`, апрув с подтверждением). Внизу
@@ -320,7 +321,8 @@ Bitbucket. Вкладку собирает `bin/open.sh`: панель `jira` с
 herdr запускает его через `/bin/sh -lc` без zsh-окружения, поэтому скрипт сам
 дописывает brew в PATH и подгружает `~/.env.d/10-work.sh`. В скрипте нет хостов
 и ключей проектов: сервер Jira берётся из конфига jira-cli, Bitbucket — из
-`$BITBUCKET_URL`, выборку задач можно переопределить через `DASHBOARD_JIRA_JQL`.
+`$BITBUCKET_URL`, выборки задач можно переопределить через `DASHBOARD_JIRA_JQL` (спринт) и
+`DASHBOARD_PREGROOMING_JQL` (прегруминг).
 
 Ссылки в панелях (и обычные URL, и OSC 8, как в `jira-table` из `zsh/jira.zsh`)
 открываются по **ctrl+клику**, а не по cmd+клику: herdr захватывает мышь

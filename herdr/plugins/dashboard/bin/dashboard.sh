@@ -7,7 +7,8 @@
 #
 # requires JIRA_API_TOKEN, BITBUCKET_URL, BITBUCKET_TOKEN in ~/.env.d
 # Сервер Jira берётся из конфига jira-cli, как в jira-table из zsh/jira.zsh.
-# DASHBOARD_JIRA_JQL переопределяет выборку задач.
+# DASHBOARD_JIRA_JQL переопределяет выборку задач спринта,
+# DASHBOARD_PREGROOMING_JQL — задач на прегруминг.
 # Репозитории для секций «все PR» — в файле repos в config-dir плагина
 # (herdr plugin config-dir vpetrukhin.dashboard): строка PROJECT/slug, # — комментарий.
 # Имена рабочих репозиториев в публичный репозиторий не кладём.
@@ -26,6 +27,7 @@ SELF="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/herdr-dashboard"
 INTERVAL="${DASHBOARD_INTERVAL:-1800}"
 JQL="${DASHBOARD_JIRA_JQL:-assignee = currentUser() AND sprint in openSprints() AND statusCategory != Done ORDER BY updated DESC}"
+PREGROOMING_JQL="${DASHBOARD_PREGROOMING_JQL:-assignee = currentUser() AND labels = pre_grooming AND statusCategory != Done ORDER BY updated DESC}"
 BB_API="$BITBUCKET_URL/rest/api/1.0"
 REPOS_FILE="${HERDR_PLUGIN_CONFIG_DIR:-$HOME/.config/herdr/plugins/config/vpetrukhin.dashboard}/repos"
 
@@ -67,14 +69,21 @@ locked() (
   "fetch_$1"
 )
 
-fetch_jira() {
-  local server
-  server="$(jira_server)"
-  jira_get "$server/rest/api/2/search" \
-    --data-urlencode "jql=$JQL" \
+# jira_search <jql> — задачи с полями для списка и превью
+jira_search() {
+  jira_get "$(jira_server)/rest/api/2/search" \
+    --data-urlencode "jql=$1" \
     --data-urlencode "fields=summary,status,priority,issuetype,description" \
-    --data-urlencode "maxResults=100" |
-    jq --arg server "$server" '{server: $server, issues}' | save jira.json
+    --data-urlencode "maxResults=100"
+}
+
+fetch_jira() {
+  local server sprint pregrooming
+  server="$(jira_server)"
+  sprint="$(jira_search "$JQL")"
+  pregrooming="$(jira_search "$PREGROOMING_JQL")"
+  jq -n --arg server "$server" --argjson s "$sprint" --argjson p "$pregrooming" \
+    '{server: $server, issues: $s.issues, pregrooming: $p.issues}' | save jira.json
 }
 
 fetch_prs() {
@@ -153,20 +162,25 @@ list() {
     def needs_work: [.reviewers[] | select(.status == "NEEDS_WORK")] | length;
 
     if $section == "jira" then
-    # Спринт: сначала «в работе», потом новые, внутри — по статусу
+    # Спринт: сначала «в работе», потом новые, внутри — по статусу.
+    # Прегруминг: без задач, которые уже видны в спринте
     ($jira[0].server) as $server
     | ($jira[0].issues | sort_by(
         (if .fields.status.statusCategory.key == "indeterminate" then 0 else 1 end),
         .fields.status.name)) as $issues
-    | ($issues | width(.key)) as $wk
-    | ($issues | width(.fields.status.name)) as $ws
-    | hdr("Спринт"; $issues | length),
-      ($issues[] |
-        (if .fields.status.statusCategory.key == "indeterminate" then "33" else "34" end) as $color
+    | ([$issues[].key]) as $sprint_keys
+    | (($jira[0].pregrooming // []) | map(select(.key as $k | $sprint_keys | index($k) | not))) as $pre
+    | ($issues + $pre | width(.key)) as $wk
+    | ($issues + $pre | width(.fields.status.name)) as $ws
+    | def row: (if .fields.status.statusCategory.key == "indeterminate" then "33" else "34" end) as $color
         | "jira\t\(.key)\t\($server)/browse/\(.key)\t  "
           + (.key | pad($wk + 2) | c("1"))
           + (.fields.status.name | pad($ws + 2) | c($color))
-          + .fields.summary)
+          + .fields.summary;
+      hdr("Спринт"; $issues | length),
+      ($issues[] | row),
+      hdr("Прегруминг"; $pre | length),
+      ($pre[] | row)
     else
     # Мои PR
     (($author[0]) as $prs
@@ -217,7 +231,7 @@ preview() {
   case $kind in
   jira)
     jq -r --arg key "$id" '
-      .issues[] | select(.key == $key)
+      first((.issues + (.pregrooming // []))[] | select(.key == $key))
       | "\u001b[1m\(.key)\u001b[0m  \(.fields.summary)",
         "\(.fields.issuetype.name) · \(.fields.status.name) · \(.fields.priority.name // "—")",
         "",
@@ -345,12 +359,13 @@ act() {
 status() {
   fetch >/dev/null 2>&1 || true
   [ -f "$CACHE/jira.json" ] || exit 0
-  local sprint mine review failed
+  local sprint pre mine review failed
   sprint="$(jq '.issues | length' "$CACHE/jira.json")"
+  pre="$(jq '[.issues[].key] as $s | [(.pregrooming // [])[] | select(.key as $k | $s | index($k) | not)] | length' "$CACHE/jira.json")"
   mine="$(jq 'length' "$CACHE/prs-author.json")"
   review="$(jq 'length' "$CACHE/prs-review.json")"
   failed="$(jq '[.[] | select((.build.failed // 0) > 0)] | length' "$CACHE/prs-author.json")"
-  printf 'sprint %s · pr %s%s · review %s\n' "$sprint" "$mine" "$([ "$failed" -gt 0 ] && printf ' (✗%s)' "$failed")" "$review"
+  printf 'sprint %s · pre %s · pr %s%s · review %s\n' "$sprint" "$pre" "$mine" "$([ "$failed" -gt 0 ] && printf ' (✗%s)' "$failed")" "$review"
 }
 
 cmd=${1:-}
